@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Image from "next/image";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,20 +20,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased relative overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
-        {/* Optimized Background Image */}
-        <div className="absolute top-0 left-0 w-full h-full -z-10">
-          <Image
-            src="/flowerbg.jpg"
-            alt="Background"
-            fill
-            priority // loads instantly on first paint
-            quality={100}
-            className="object-cover object-[center_top_30%]"
-            sizes="100vw"
-          />
-        </div>
 
         {children}
       </body>

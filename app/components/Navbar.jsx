@@ -8,23 +8,23 @@ const Navbar = () => {
       {/* Brand */}
       <Link
         href="/"
-        className="text-2xl md:text-3xl font-semibold tracking-wide"
+        className="text-2xl md:text-3xl text-[#0E7C6B] font-semibold tracking-wide"
       >
-        Happtitude
+        Hapttitude
       </Link>
 
       {/* Icons */}
       <div className="flex items-center space-x-6 text-sm md:text-base font-medium">
         <Link
           href="#cart"
-          className="hover:text-pink-300 transition-colors"
+          className="hover:text-green-300 transition-colors"
           aria-label="Cart"
         >
           <ShoppingCart size={24} />
         </Link>
         <Link
           href="#profile"
-          className="hover:text-pink-300 transition-colors"
+          className="hover:text-green-300 transition-colors"
           aria-label="Profile"
         >
           <User size={24} />
