@@ -16,7 +16,7 @@ export default function Home() {
         <Header />
       </div>
     </div>
-    <div className="min-h-screen w-screen flex flex-col items-center bg-green-600 py-16 px-6">
+    <div className="min-h-screen w-screen flex flex-col items-center bg-gradient-to-br   from-[#71B280] to-[#134E5E] py-16 px-6">
   {/* ===== Heading ===== */}
   <div className="mb-12 text-center">
     <h1 className="text-3xl sm:text-4xl font-bold tracking-wide text-white drop-shadow-md">

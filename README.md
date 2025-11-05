@@ -18,7 +18,25 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses Nodemailer for email OTP verification.
+
+### SMTP Environment Variables
+
+Create a `.env.local` with:
+
+```
+MONGODB_URI=your_mongodb_connection_string
+SMTP_HOST=smtp.yourprovider.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your_smtp_username
+SMTP_PASS=your_smtp_password
+SMTP_FROM="Your App <no-reply@yourdomain.com>"
+```
+
+Endpoints:
+- `POST /api/user/send-otp` { email }
+- `POST /api/user/verify` { email, otp }
 
 ## Learn More
 

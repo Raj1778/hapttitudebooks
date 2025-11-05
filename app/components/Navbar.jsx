@@ -8,7 +8,7 @@ const Navbar = () => {
       {/* Brand */}
       <Link
         href="/"
-        className="text-2xl md:text-3xl text-[#0E7C6B] font-semibold tracking-wide"
+        className="text-2xl md:text-3xl text-white font-semibold tracking-wide"
       >
         Hapttitude
       </Link>

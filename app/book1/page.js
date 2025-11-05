@@ -7,18 +7,72 @@ import {
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "../components/input-otp"
+} from "../components/input-otp";
+
 
 export default function BookPage() {
   const [showOtpModal, setShowOtpModal] = useState(false);
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+
+  // ====== Send OTP ======
+  const sendOtp = async () => {
+    if (!email) return alert("Enter a valid email address");
+    try {
+      const res = await fetch("/api/user/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to send OTP");
+      setOtpSent(true);
+      if (data.previewUrl) {
+        alert(`OTP sent (dev preview): ${data.previewUrl}`);
+        console.log("Preview URL:", data.previewUrl);
+      } else {
+        alert("OTP sent to " + email);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send OTP: " + err.message);
+    }
+  };
+
+  // ====== Verify OTP ======
+  const verifyOtp = async () => {
+    if (!otp || otp.length < 6) return alert("Enter 6-digit OTP");
+
+    try {
+      await confirmationResult.confirm(otp);
+
+      // Call backend to mark user as verified
+      const res = await fetch("/api/user/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mobile }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert("Phone verified successfully!");
+        setShowOtpModal(false);
+      } else {
+        alert("User verification failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Invalid OTP");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center justify-start md:justify-center px-4 sm:px-6 lg:px-20 pt-8 md:py-2">
-      
+
       {/* ====== Main Container ====== */}
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-6 lg:gap-8 relative mb-6 md:mb-0">
-        
+
         {/* ====== Book Cover - Mobile ====== */}
         <div className="flex justify-center lg:hidden mb-6">
           <Image
@@ -100,65 +154,78 @@ export default function BookPage() {
         </div>
       </div>
 
-      {/* ===== OTP Modal ===== */}
+      {/* ===== Email OTP Modal ===== */}
       {showOtpModal && (
-  <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-    <div className="bg-[#f8fdf9] border border-[#d5e9dc] rounded-3xl shadow-2xl p-8 w-[90%] sm:w-[400px] text-center relative animate-fadeIn">
-      <button
-        onClick={() => setShowOtpModal(false)}
-        className="absolute top-4 right-4 text-[#355944] hover:text-[#1f3b2c]"
-      >
-        <X className="w-5 h-5" />
-      </button>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-[#f8fdf9] border border-[#d5e9dc] rounded-3xl shadow-2xl p-8 w-[90%] sm:w-[400px] text-center relative animate-fadeIn">
+            <button
+              onClick={() => setShowOtpModal(false)}
+              className="absolute top-4 right-4 text-[#355944] hover:text-[#1f3b2c]"
+            >
+              <X className="w-5 h-5" />
+            </button>
 
-      <h2 className="text-2xl font-semibold text-[#1f3b2c] mb-6">
-        {otpSent ? "Enter OTP" : "Verify Your Mobile"}
-      </h2>
+            <h2 className="text-2xl font-semibold text-[#1f3b2c] mb-6">Verify Your Email</h2>
 
-      {!otpSent ? (
-        <>
-          <input
-            type="tel"
-            placeholder="Enter mobile number"
-            className="w-full border border-[#cfe5d8] rounded-full px-5 py-3 text-[#1f3b2c] focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]/60"
-          />
-          <button
-            onClick={() => setOtpSent(true)}
-            className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
-          >
-            Send OTP
-          </button>
-        </>
-      ) : (
-        <>
-          {/* ====== SHADCN OTP INPUT ====== */}
-          <div className="flex justify-center mb-6">
-            <InputOTP maxLength={6}>
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
+            {!otpSent ? (
+              <>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border border-[#cfe5d8] rounded-full px-5 py-3 text-[#1f3b2c] focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]/60"
+                />
+                <button
+                  onClick={sendOtp}
+                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+                >
+                  Send OTP
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="flex justify-center mb-6">
+                  <InputOTP maxLength={6} onComplete={(val) => setOtp(val)}>
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </div>
+                <button
+                  onClick={async () => {
+                    if (!otp || otp.length < 6) return alert("Enter 6-digit OTP");
+                    try {
+                      const res = await fetch("/api/user/verify", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email, otp }),
+                      });
+                      const data = await res.json();
+                      if (!res.ok) throw new Error(data.error || "Verification failed");
+                      alert("Email verified successfully!");
+                      setShowOtpModal(false);
+                    } catch (err) {
+                      alert(err.message);
+                    }
+                  }}
+                  className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+                >
+                  Verify & Continue
+                </button>
+              </>
+            )}
           </div>
-
-          <button
-            onClick={() => setShowOtpModal(false)}
-            className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
-          >
-            Verify & Continue
-          </button>
-        </>
+        </div>
       )}
-    </div>
-  </div>
-)}
 
     </div>
   );

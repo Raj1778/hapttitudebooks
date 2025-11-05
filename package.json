@@ -10,8 +10,11 @@
   "dependencies": {
     "@tabler/icons-react": "^3.35.0",
     "clsx": "^2.1.1",
+    "nodemailer": "^6.9.16",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.552.0",
+    "mongodb": "^6.20.0",
+    "mongoose": "^8.19.3",
     "motion": "^12.23.24",
     "next": "16.0.1",
     "react": "19.2.0",
