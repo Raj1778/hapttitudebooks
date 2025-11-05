@@ -1,8 +1,208 @@
+"use client";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
+  const router = useRouter();
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState("");
+  const [otherBooks, setOtherBooks] = useState([]);
+
+  // Get user email from localStorage
+  useEffect(() => {
+    const email = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
+    setUserEmail(email || "");
+  }, []);
+
+  // Fetch cart items
+  useEffect(() => {
+    if (userEmail) {
+      fetchCart();
+    } else {
+      setLoading(false);
+    }
+  }, [userEmail]);
+
+  const fetchCart = async () => {
+    try {
+      const res = await fetch("/api/cart/get", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCartItems(data.cart || []);
+      }
+    } catch (err) {
+      console.error("Error fetching cart:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchOtherBooks = useCallback(async () => {
+    try {
+      // Get all products
+      const res = await fetch("/api/products/get-all");
+      const data = await res.json();
+      
+      if (res.ok && data.products && data.products.length > 0) {
+        // Filter out books already in cart and get only Digital Rain and Parallel Minds
+        const cartProductIds = cartItems.map(item => item.productId?._id?.toString());
+        const availableBooks = data.products.filter(
+          book => !cartProductIds.includes(book._id.toString()) && 
+          (book.name === "Digital Rain" || book.name === "Parallel Minds")
+        );
+        setOtherBooks(availableBooks);
+      } else {
+        // Fallback: Show hardcoded books if products not in DB yet
+        const cartProductIds = cartItems.map(item => item.productId?.name);
+        const hardcodedBooks = [
+          { _id: "digital-rain", name: "Digital Rain", author: "Pretty Bhalla", price: 599, image: "/book2.png" },
+          { _id: "parallel-minds", name: "Parallel Minds", author: "Pretty Bhalla", price: 399, image: "/book1.jpg" }
+        ].filter(book => !cartProductIds.includes(book.name));
+        setOtherBooks(hardcodedBooks);
+      }
+    } catch (err) {
+      console.error("Error fetching other books:", err);
+      // Fallback: Show hardcoded books on error
+      const cartProductIds = cartItems.map(item => item.productId?.name);
+      const hardcodedBooks = [
+        { _id: "digital-rain", name: "Digital Rain", author: "Pretty Bhalla", price: 599, image: "/book2.png" },
+        { _id: "parallel-minds", name: "Parallel Minds", author: "Pretty Bhalla", price: 399, image: "/book1.jpg" }
+      ].filter(book => !cartProductIds.includes(book.name));
+      setOtherBooks(hardcodedBooks);
+    }
+  }, [cartItems]);
+
+  // Fetch other books after cart is loaded (placed after definition)
+  useEffect(() => {
+    if (userEmail) {
+      fetchOtherBooks();
+    }
+  }, [fetchOtherBooks, userEmail]);
+
+  const updateQuantity = async (productId, newQuantity) => {
+    if (newQuantity <= 0) {
+      removeItem(productId);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/cart/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail, productId, quantity: newQuantity }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        fetchCart();
+      } else {
+        alert(data.error || "Failed to update quantity");
+      }
+    } catch (err) {
+      alert("Error updating quantity");
+    }
+  };
+
+  const removeItem = async (productId) => {
+    try {
+      const res = await fetch("/api/cart/remove", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail, productId }),
+      });
+      if (res.ok) {
+        fetchCart();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to remove item");
+      }
+    } catch (err) {
+      alert("Error removing item");
+    }
+  };
+
+  const addToCart = async (productId) => {
+    try {
+      // If productId is a hardcoded book ID (contains hyphen), we need to get the actual product from DB
+      let actualProductId = productId;
+      
+      if (typeof productId === "string" && (productId.includes("digital-rain") || productId.includes("parallel-minds"))) {
+        // It's a hardcoded book, need to find/create product in DB
+        const bookName = productId === "digital-rain" ? "Digital Rain" : "Parallel Minds";
+        const productRes = await fetch("/api/products/get", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: bookName }),
+        });
+        const productData = await productRes.json();
+        
+        if (productRes.ok && productData.product) {
+          actualProductId = productData.product._id;
+        } else {
+          alert("Product not found. Please seed products first.");
+          return;
+        }
+      }
+      // Otherwise, it's already a MongoDB ObjectId, use as is
+      
+      const res = await fetch("/api/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail, productId: actualProductId, quantity: 1 }),
+      });
+      if (res.ok) {
+        fetchCart();
+        alert("Added to cart!");
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to add to cart");
+      }
+    } catch (err) {
+      alert("Error adding to cart: " + err.message);
+    }
+  };
+
+  // Calculate prices
+  const subtotal = cartItems.reduce((sum, item) => {
+    if (item.productId && item.productId.price) {
+      return sum + item.productId.price * item.quantity;
+    }
+    return sum;
+  }, 0);
+
+  const shipping = subtotal > 0 ? 40 : 0;
+  const total = subtotal + shipping;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center">
+        <p className="text-[#1f3b2c]">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!userEmail) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-[#1f3b2c] mb-4">Please verify your email first</p>
+          <Link href="/book1">
+            <button className="px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full">
+              Go to Book Page
+            </button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
       
@@ -18,44 +218,70 @@ export default function CartPage() {
         <div className="flex-1 bg-[#f8fdf9] rounded-3xl shadow-md p-6 sm:p-8 border border-[#d5e9dc]/60">
           <h2 className="text-xl font-semibold text-[#1f3b2c] mb-4">Items</h2>
 
-          {/* ===== Cart Item ===== */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-[#dbeee1] pb-6">
-            <div className="flex items-center gap-6">
-              <Image
-                src="/book1.jpg"
-                alt="Hapttitude Waves"
-                width={100}
-                height={140}
-                className="rounded-lg shadow-md"
-              />
-              <div>
-                <h3 className="text-lg font-semibold text-[#1f3b2c]">
-                  Hapttitude Waves
-                </h3>
-                <p className="text-sm text-[#3b4a3f]">by Pretty Bhalla</p>
-                <p className="text-sm text-[#3b4a3f] mt-2">Paperback edition</p>
-              </div>
+          {cartItems.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-[#3b4a3f]">Your cart is empty</p>
+              <Link href="/book1">
+                <button className="mt-4 px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full">
+                  Continue Shopping
+                </button>
+              </Link>
             </div>
+          ) : (
+            cartItems.map((item) => {
+              const product = item.productId;
+              if (!product) return null;
+              
+              return (
+                <div key={item._id || product._id} className="flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-[#dbeee1] pb-6 mb-6 last:mb-0 last:border-b-0">
+                  <div className="flex items-center gap-6">
+                    <Image
+                      src={product.image || "/book1.jpg"}
+                      alt={product.name}
+                      width={100}
+                      height={140}
+                      className="rounded-lg shadow-md"
+                    />
+                    <div>
+                      <h3 className="text-lg font-semibold text-[#1f3b2c]">
+                        {product.name}
+                      </h3>
+                      <p className="text-sm text-[#3b4a3f]">by {product.author}</p>
+                      <p className="text-sm text-[#3b4a3f] mt-2">Paperback edition</p>
+                    </div>
+                  </div>
 
-            {/* ===== Quantity Controls ===== */}
-            <div className="flex items-center gap-4">
-              <button className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition">
-                <Minus className="w-4 h-4" />
-              </button>
-              <span className="text-[#1f3b2c] font-medium">1</span>
-              <button className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition">
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
+                  {/* ===== Quantity Controls ===== */}
+                  <div className="flex items-center gap-4">
+                    <button 
+                      onClick={() => updateQuantity(product._id, item.quantity - 1)}
+                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="text-[#1f3b2c] font-medium w-8 text-center">{item.quantity}</span>
+                    <button 
+                      onClick={() => updateQuantity(product._id, item.quantity + 1)}
+                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
 
-            {/* ===== Price & Remove ===== */}
-            <div className="flex flex-col items-center sm:items-end gap-2">
-              <p className="text-lg font-semibold text-[#1f3b2c]">₹499</p>
-              <button className="text-sm text-[#527f66] hover:text-[#2f5d44] flex items-center gap-1">
-                <Trash2 className="w-4 h-4" /> Remove
-              </button>
-            </div>
-          </div>
+                  {/* ===== Price & Remove ===== */}
+                  <div className="flex flex-col items-center sm:items-end gap-2">
+                    <p className="text-lg font-semibold text-[#1f3b2c]">₹{product.price * item.quantity}</p>
+                    <button 
+                      onClick={() => removeItem(product._id)}
+                      className="text-sm text-[#527f66] hover:text-[#2f5d44] flex items-center gap-1"
+                    >
+                      <Trash2 className="w-4 h-4" /> Remove
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
 
         {/* ===== Right: Order Summary ===== */}
@@ -64,23 +290,64 @@ export default function CartPage() {
 
           <div className="flex justify-between text-[#3b4a3f] mb-2">
             <p>Subtotal</p>
-            <p>₹499</p>
+            <p>₹{subtotal}</p>
           </div>
           <div className="flex justify-between text-[#3b4a3f] mb-2">
             <p>Shipping</p>
-            <p>₹40</p>
+            <p>₹{shipping}</p>
           </div>
           <div className="flex justify-between text-[#1f3b2c] font-semibold text-lg border-t border-[#dbeee1] mt-4 pt-4">
             <p>Total</p>
-            <p>₹539</p>
+            <p>₹{total}</p>
           </div>
+          {cartItems.length > 0 && (
             <Link href="/select-address">
-          <button className="w-full mt-6 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300">
-            Select address at next step
-          </button>
-          </Link>
+              <button className="w-full mt-6 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300">
+                Select address at next step
+              </button>
+            </Link>
+          )}
         </div>
       </div>
+
+      {/* ===== Users also bought Section ===== */}
+      {userEmail && (
+        <div className="w-full max-w-6xl mt-12">
+          <h2 className="text-2xl font-semibold text-[#1f3b2c] mb-6">Users also bought..</h2>
+          {otherBooks.length > 0 ? (
+            <div className="flex flex-col sm:flex-row gap-6">
+              {otherBooks.map((book) => (
+                <div key={book._id} className="flex-1 bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Image
+                      src={book.image || "/book1.jpg"}
+                      alt={book.name}
+                      width={120}
+                      height={160}
+                      className="rounded-lg shadow-md"
+                    />
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-[#1f3b2c]">{book.name}</h3>
+                      <p className="text-sm text-[#3b4a3f]">by {book.author}</p>
+                      <p className="text-lg font-semibold text-[#1f3b2c] mt-2">₹{book.price}</p>
+                      <button
+                        onClick={() => addToCart(book._id)}
+                        className="mt-4 px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all"
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 bg-[#f8fdf9] rounded-3xl border border-[#d5e9dc]/60">
+              <p className="text-[#3b4a3f]">Loading suggestions...</p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

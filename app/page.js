@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import HeaderBackground from "./components/HeaderBackground";
 import BookCard from "./components/BookCard";
+import Author from "./components/Author";
 
 export default function Home() {
   return (
@@ -16,7 +17,7 @@ export default function Home() {
         <Header />
       </div>
     </div>
-    <div className="min-h-screen w-screen flex flex-col items-center bg-gradient-to-br   from-[#71B280] to-[#134E5E] py-16 px-6">
+    <div className="min-h-screen w-screen flex flex-col items-center bg-gradient-to-tr from-green-600 via-blue-400 to-white py-8 px-6">
   {/* ===== Heading ===== */}
   <div className="mb-12 text-center">
     <h1 className="text-3xl sm:text-4xl font-bold tracking-wide text-white drop-shadow-md">
@@ -39,8 +40,9 @@ export default function Home() {
     <BookCard img="/book1.jpg" name="Parallel Minds" price="₹399" />
     </Link>
   </div>
+  
 </div>
-
+<Author></Author>
     </>
   );
 }

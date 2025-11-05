@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { ExternalLink, X } from "lucide-react";
 import Image from "next/image";
 import {
@@ -11,10 +12,107 @@ import {
 
 
 export default function BookPage() {
+  const router = useRouter();
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+
+  // Check if user is already verified on component mount
+  useEffect(() => {
+    const checkVerification = async () => {
+      const savedEmail = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
+      if (savedEmail) {
+        setEmail(savedEmail);
+        try {
+          const res = await fetch("/api/user/check-verified", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: savedEmail }),
+          });
+          const data = await res.json();
+          if (res.ok && data.isVerified) {
+            setIsVerified(true);
+          }
+        } catch (err) {
+          console.error("Error checking verification:", err);
+        }
+      }
+    };
+    checkVerification();
+  }, []);
+
+  // Function to add book to cart and redirect
+  const addBookToCart = async (userEmail) => {
+    try {
+      // Get product ID for "Hapttitude Waves"
+      const productRes = await fetch("/api/products/get", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "Hapttitude Waves" }),
+      });
+      const productData = await productRes.json();
+      
+      if (productRes.ok && productData.product) {
+        // Add to cart
+        const cartRes = await fetch("/api/cart/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            email: userEmail, 
+            productId: productData.product._id,
+            quantity: 1 
+          }),
+        });
+        
+        if (cartRes.ok) {
+          router.push("/cart");
+        } else {
+          const cartData = await cartRes.json();
+          alert(cartData.error || "Failed to add to cart");
+        }
+      } else {
+        alert("Product not found. Please seed products first.");
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      alert("Error adding to cart: " + err.message);
+    }
+  };
+
+  // Handle Buy Now button click
+  const handleBuyNow = async () => {
+    const savedEmail = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
+    
+    if (savedEmail && isVerified) {
+      // User is already verified, add to cart directly
+      await addBookToCart(savedEmail);
+    } else if (savedEmail) {
+      // Email exists but not verified, check server
+      try {
+        const res = await fetch("/api/user/check-verified", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: savedEmail }),
+        });
+        const data = await res.json();
+        if (res.ok && data.isVerified) {
+          setIsVerified(true);
+          await addBookToCart(savedEmail);
+        } else {
+          // Need to verify
+          setShowOtpModal(true);
+          setEmail(savedEmail);
+        }
+      } catch (err) {
+        setShowOtpModal(true);
+      }
+    } else {
+      // No email saved, show OTP modal
+      setShowOtpModal(true);
+    }
+  };
 
   // ====== Send OTP ======
   const sendOtp = async () => {
@@ -110,7 +208,7 @@ export default function BookPage() {
           {/* ====== Buttons ====== */}
           <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
             <button
-              onClick={() => setShowOtpModal(true)}
+              onClick={handleBuyNow}
               className="px-7 py-2.5 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 flex items-center gap-2"
             >
               <span>Buy now</span>
@@ -204,13 +302,22 @@ export default function BookPage() {
                   onClick={async () => {
                     if (!otp || otp.length < 6) return alert("Enter 6-digit OTP");
                     try {
-                      const res = await fetch("/api/user/verify", {
+                      // Verify OTP
+                      const verifyRes = await fetch("/api/user/verify", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ email, otp }),
                       });
-                      const data = await res.json();
-                      if (!res.ok) throw new Error(data.error || "Verification failed");
+                      const verifyData = await verifyRes.json();
+                      if (!verifyRes.ok) throw new Error(verifyData.error || "Verification failed");
+                      
+                      // Store email in localStorage and mark as verified
+                      localStorage.setItem("userEmail", email);
+                      setIsVerified(true);
+                      
+                      // Add book to cart
+                      await addBookToCart(email);
+                      
                       alert("Email verified successfully!");
                       setShowOtpModal(false);
                     } catch (err) {

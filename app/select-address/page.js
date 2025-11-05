@@ -2,10 +2,14 @@
 import { useState } from "react";
 import { MapPin, Home, PlusCircle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function SelectAddressPage() {
+  const router = useRouter();
   const [selected, setSelected] = useState("home");
   const [showNew, setShowNew] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
@@ -122,13 +126,32 @@ export default function SelectAddressPage() {
           </div>
         )}
 
+       
+
         {/* ===== Continue Button ===== */}
         <div className="mt-10 flex justify-end">
-          <Link href="/payment">
-            <button className="px-8 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300">
-              Continue to Payment
-            </button>
-          </Link>
+          <button
+            onClick={() => {
+              if (!phoneNumber || phoneNumber.trim() === "") {
+                setPhoneError("Phone number is required");
+                return;
+              }
+              // Validate phone number format (basic validation)
+              const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
+              if (!phoneRegex.test(phoneNumber.trim())) {
+                setPhoneError("Please enter a valid phone number");
+                return;
+              }
+              // Store phone number in localStorage
+              if (typeof window !== "undefined") {
+                localStorage.setItem("deliveryPhone", phoneNumber.trim());
+              }
+              router.push("/payment");
+            }}
+            className="px-8 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+          >
+            Continue to Payment
+          </button>
         </div>
       </div>
     </div>

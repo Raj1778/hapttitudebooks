@@ -1,9 +1,114 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { CreditCard, Smartphone, Wallet } from "lucide-react";
 
 export default function PaymentPage() {
+  const router = useRouter();
   const [selected, setSelected] = useState("card");
+  const [userEmail, setUserEmail] = useState("");
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const email = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
+    setUserEmail(email || "");
+    
+    if (email) {
+      fetchCart(email);
+    }
+  }, []);
+
+  const fetchCart = async (email) => {
+    try {
+      const res = await fetch("/api/cart/get", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCartItems(data.cart || []);
+      }
+    } catch (err) {
+      console.error("Error fetching cart:", err);
+    }
+  };
+
+  const handlePayment = async () => {
+    if (!userEmail) {
+      alert("Please verify your email first");
+      router.push("/book1");
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      alert("Your cart is empty");
+      router.push("/cart");
+      return;
+    }
+
+    const phone = typeof window !== "undefined" ? localStorage.getItem("deliveryPhone") : null;
+    if (!phone) {
+      alert("Please provide a phone number");
+      router.push("/select-address");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Create order
+      const order = {
+        orderId: `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        email: userEmail,
+        phone: phone,
+        items: cartItems.map(item => ({
+          name: item.productId?.name || "Unknown",
+          price: item.productId?.price || 0,
+          quantity: item.quantity,
+          image: item.productId?.image || "/book1.jpg",
+        })),
+        total: cartItems.reduce((sum, item) => {
+          if (item.productId && item.productId.price) {
+            return sum + item.productId.price * item.quantity;
+          }
+          return sum;
+        }, 0) + 40, // Including shipping
+        date: new Date().toISOString(),
+        status: "Pending",
+        paymentMethod: selected,
+      };
+
+      // Save order to localStorage (since we're not using user model)
+      const existingOrders = typeof window !== "undefined" 
+        ? JSON.parse(localStorage.getItem(`orders_${userEmail}`) || "[]") 
+        : [];
+      existingOrders.push(order);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(`orders_${userEmail}`, JSON.stringify(existingOrders));
+      }
+
+      // Clear cart
+      for (const item of cartItems) {
+        if (item.productId?._id) {
+          await fetch("/api/cart/remove", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: userEmail, productId: item.productId._id }),
+          });
+        }
+      }
+
+      alert("Order placed successfully!");
+      router.push("/my-orders");
+    } catch (err) {
+      console.error("Error placing order:", err);
+      alert("Error placing order. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#f9f7f4] flex items-center justify-center px-6 py-12">
@@ -116,8 +221,12 @@ export default function PaymentPage() {
           </div>
 
           {/* ===== Pay Button ===== */}
-          <button className="w-full mt-4 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] font-semibold rounded-xl shadow-md hover:from-[#1f3f2e] hover:to-[#2b5c44] transition-all duration-300">
-            Confirm Payment
+          <button 
+            onClick={handlePayment}
+            disabled={loading || cartItems.length === 0}
+            className="w-full mt-4 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] font-semibold rounded-xl shadow-md hover:from-[#1f3f2e] hover:to-[#2b5c44] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Processing..." : "Confirm Payment"}
           </button>
         </div>
       </div>
