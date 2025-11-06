@@ -19,11 +19,10 @@ const BookCard = ({ img, name = "Hapttitude Waves", price = "₹499" }) => {
       </div>
 
       {/* ===== Book Info ===== */}
-      <div className="mt-4 text-center bg-blue-600 p-2 rounded-md  ">
+      <div className="mt-4 text-center bg-green-900 px-4 py-2 rounded-full ">
         <h3 className="text-lg font-semibold text-white/90 group-hover:text-white transition-colors">
           Learn more 
         </h3>
-        
       </div>
     </div>
   );
