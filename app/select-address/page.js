@@ -79,7 +79,7 @@ export default function SelectAddressPage() {
         {!showNew ? (
           <button
             onClick={() => setShowNew(true)}
-            className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] mt-8 font-medium transition-all"
+            className="cursor-pointer flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] mt-8 font-medium transition-all"
           >
             <PlusCircle className="w-5 h-5" /> Add New Address
           </button>
@@ -119,7 +119,7 @@ export default function SelectAddressPage() {
             </div>
             <button
               onClick={() => setShowNew(false)}
-              className="mt-2 py-2.5 px-6 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+              className=" cursor-pointer mt-2 py-2.5 px-6 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
             >
               Save Address
             </button>
@@ -129,7 +129,7 @@ export default function SelectAddressPage() {
        
 
         {/* ===== Continue Button ===== */}
-        <div className="mt-10 flex justify-end">
+        <div className="mt-10 flex justify-end ">
           <button
             onClick={() => {
               if (!phoneNumber || phoneNumber.trim() === "") {
@@ -148,7 +148,7 @@ export default function SelectAddressPage() {
               }
               router.push("/payment");
             }}
-            className="px-8 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+            className="cursor-pointer px-8 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
           >
             Continue to Payment
           </button>

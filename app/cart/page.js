@@ -302,7 +302,7 @@ export default function CartPage() {
           </div>
           {cartItems.length > 0 && (
             <Link href="/select-address">
-              <button className="w-full mt-6 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300">
+              <button className="w-full mt-6 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 cursor-pointer">
                 Select address at next step
               </button>
             </Link>
