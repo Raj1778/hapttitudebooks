@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function CartPage() {
   const router = useRouter();
@@ -52,31 +53,21 @@ export default function CartPage() {
       const data = await res.json();
       
       if (res.ok && data.products && data.products.length > 0) {
-        // Filter out books already in cart and get only Digital Rain and Parallel Minds
+        // Filter out books already in cart - show only 3 other books
         const cartProductIds = cartItems.map(item => item.productId?._id?.toString());
         const availableBooks = data.products.filter(
-          book => !cartProductIds.includes(book._id.toString()) && 
-          (book.name === "Digital Rain" || book.name === "Parallel Minds")
+          book => !cartProductIds.includes(book._id.toString())
         );
-        setOtherBooks(availableBooks);
+        // Limit to 3 items to avoid clutter
+        setOtherBooks(availableBooks.slice(0, 3));
       } else {
-        // Fallback: Show hardcoded books if products not in DB yet
-        const cartProductIds = cartItems.map(item => item.productId?.name);
-        const hardcodedBooks = [
-          { _id: "digital-rain", name: "Digital Rain", author: "Pretty Bhalla", price: 599, image: "/book2.png" },
-          { _id: "parallel-minds", name: "Parallel Minds", author: "Pretty Bhalla", price: 399, image: "/book1.jpg" }
-        ].filter(book => !cartProductIds.includes(book.name));
-        setOtherBooks(hardcodedBooks);
+        // No products in database, show empty
+        setOtherBooks([]);
       }
     } catch (err) {
       console.error("Error fetching other books:", err);
-      // Fallback: Show hardcoded books on error
-      const cartProductIds = cartItems.map(item => item.productId?.name);
-      const hardcodedBooks = [
-        { _id: "digital-rain", name: "Digital Rain", author: "Pretty Bhalla", price: 599, image: "/book2.png" },
-        { _id: "parallel-minds", name: "Parallel Minds", author: "Pretty Bhalla", price: 399, image: "/book1.jpg" }
-      ].filter(book => !cartProductIds.includes(book.name));
-      setOtherBooks(hardcodedBooks);
+      // On error, show empty
+      setOtherBooks([]);
     }
   }, [cartItems]);
 
@@ -93,21 +84,32 @@ export default function CartPage() {
       return;
     }
 
-    try {
-      const res = await fetch("/api/cart/update", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: userEmail, productId, quantity: newQuantity }),
-      });
-      const data = await res.json();
-      if (res.ok) {
+    // Optimistic update - update UI immediately
+    setCartItems(prevItems => 
+      prevItems.map(item => 
+        item.productId?._id?.toString() === productId.toString() 
+          ? { ...item, quantity: newQuantity }
+          : item
+      )
+    );
+
+    // Then sync with backend (fire and forget for speed)
+    fetch("/api/cart/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail, productId, quantity: newQuantity }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) {
+          // If failed, refetch to sync with server
+          fetchCart();
+        }
+      })
+      .catch(() => {
+        // On error, refetch to sync with server
         fetchCart();
-      } else {
-        alert(data.error || "Failed to update quantity");
-      }
-    } catch (err) {
-      alert("Error updating quantity");
-    }
+      });
   };
 
   const removeItem = async (productId) => {
@@ -119,12 +121,13 @@ export default function CartPage() {
       });
       if (res.ok) {
         fetchCart();
+        toast.success("Item removed from cart");
       } else {
         const data = await res.json();
-        alert(data.error || "Failed to remove item");
+        toast.error(data.error || "Failed to remove item");
       }
     } catch (err) {
-      alert("Error removing item");
+      toast.error("Error removing item");
     }
   };
 
@@ -133,9 +136,12 @@ export default function CartPage() {
       // If productId is a hardcoded book ID (contains hyphen), we need to get the actual product from DB
       let actualProductId = productId;
       
-      if (typeof productId === "string" && (productId.includes("digital-rain") || productId.includes("parallel-minds"))) {
+      if (typeof productId === "string" && (productId.includes("hapttitude-wave1") || productId.includes("hapttitude-wave2") || productId.includes("hapttitude-wave3"))) {
         // It's a hardcoded book, need to find/create product in DB
-        const bookName = productId === "digital-rain" ? "Digital Rain" : "Parallel Minds";
+        let bookName = "";
+        if (productId.includes("hapttitude-wave1")) bookName = "Hapttitude Wave 1";
+        else if (productId.includes("hapttitude-wave2")) bookName = "Hapttitude Wave 2";
+        else if (productId.includes("hapttitude-wave3")) bookName = "Hapttitude Wave 3";
         const productRes = await fetch("/api/products/get", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -146,7 +152,7 @@ export default function CartPage() {
         if (productRes.ok && productData.product) {
           actualProductId = productData.product._id;
         } else {
-          alert("Product not found. Please seed products first.");
+          toast.error("Product not found. Please seed products first.");
           return;
         }
       }
@@ -159,13 +165,13 @@ export default function CartPage() {
       });
       if (res.ok) {
         fetchCart();
-        alert("Added to cart!");
+        toast.success("Added to cart!");
       } else {
         const data = await res.json();
-        alert(data.error || "Failed to add to cart");
+        toast.error(data.error || "Failed to add to cart");
       }
     } catch (err) {
-      alert("Error adding to cart: " + err.message);
+      toast.error("Error adding to cart: " + err.message);
     }
   };
 
@@ -193,11 +199,11 @@ export default function CartPage() {
       <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center">
         <div className="text-center">
           <p className="text-[#1f3b2c] mb-4">Please verify your email first</p>
-          <Link href="/book1">
-            <button className="px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full">
-              Go to Book Page
-            </button>
-          </Link>
+              <Link href="/hapttitude-wave1">
+                <button className="px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
+                  Go to Book Page
+                </button>
+              </Link>
         </div>
       </div>
     );
@@ -206,6 +212,14 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
       
+      {/* ===== Back Button ===== */}
+      <div className="w-full max-w-6xl mb-4">
+        <Link href="/hapttitude-wave1" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Book Page
+        </Link>
+      </div>
+
       {/* ===== Title ===== */}
       <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1f3b2c] mb-8">
         Your Cart
@@ -221,8 +235,8 @@ export default function CartPage() {
           {cartItems.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-[#3b4a3f]">Your cart is empty</p>
-              <Link href="/book1">
-                <button className="mt-4 px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full">
+              <Link href="/hapttitude-wave1">
+                <button className="mt-4 px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
                   Continue Shopping
                 </button>
               </Link>
@@ -255,14 +269,14 @@ export default function CartPage() {
                   <div className="flex items-center gap-4">
                     <button 
                       onClick={() => updateQuantity(product._id, item.quantity - 1)}
-                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition"
+                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition active:scale-95 cursor-pointer"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
                     <span className="text-[#1f3b2c] font-medium w-8 text-center">{item.quantity}</span>
                     <button 
                       onClick={() => updateQuantity(product._id, item.quantity + 1)}
-                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition"
+                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition active:scale-95 cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -273,7 +287,7 @@ export default function CartPage() {
                     <p className="text-lg font-semibold text-[#1f3b2c]">₹{product.price * item.quantity}</p>
                     <button 
                       onClick={() => removeItem(product._id)}
-                      className="text-sm text-[#527f66] hover:text-[#2f5d44] flex items-center gap-1"
+                      className="text-sm text-[#527f66] hover:text-[#2f5d44] flex items-center gap-1 cursor-pointer active:scale-95 transition-transform"
                     >
                       <Trash2 className="w-4 h-4" /> Remove
                     </button>
@@ -302,7 +316,7 @@ export default function CartPage() {
           </div>
           {cartItems.length > 0 && (
             <Link href="/select-address">
-              <button className="w-full mt-6 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 cursor-pointer">
+              <button className="w-full mt-6 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 cursor-pointer active:scale-95">
                 Select address at next step
               </button>
             </Link>
@@ -315,7 +329,7 @@ export default function CartPage() {
         <div className="w-full max-w-6xl mt-12">
           <h2 className="text-2xl font-semibold text-[#1f3b2c] mb-6">Users also bought..</h2>
           {otherBooks.length > 0 ? (
-            <div className="flex flex-col sm:flex-row gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {otherBooks.map((book) => (
                 <div key={book._id} className="flex-1 bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60">
                   <div className="flex flex-col sm:flex-row gap-4">
@@ -332,7 +346,7 @@ export default function CartPage() {
                       <p className="text-lg font-semibold text-[#1f3b2c] mt-2">₹{book.price}</p>
                       <button
                         onClick={() => addToCart(book._id)}
-                        className="mt-4 px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all"
+                        className="mt-4 px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all cursor-pointer active:scale-95"
                       >
                         Add to Cart
                       </button>

@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { MapPin, Home, PlusCircle, X } from "lucide-react";
-import Link from "next/link";
+import { MapPin, Home, PlusCircle, X, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function SelectAddressPage() {
   const router = useRouter();
@@ -29,8 +30,8 @@ export default function SelectAddressPage() {
   useEffect(() => {
     const email = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
     if (!email) {
-      alert("Please verify your email first");
-      router.push("/book1");
+      toast.error("Please verify your email first");
+      router.push("/hapttitude-wave1");
       return;
     }
     setUserEmail(email);
@@ -68,9 +69,23 @@ export default function SelectAddressPage() {
     if (!newAddress.phoneNumber.trim()) {
       errors.phoneNumber = "Phone number is required";
     } else {
-      const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
-      if (!phoneRegex.test(newAddress.phoneNumber.trim())) {
-        errors.phoneNumber = "Please enter a valid phone number";
+      // Format phone number with +91 prefix
+      let phone = newAddress.phoneNumber.trim().replace(/\s+/g, "");
+      
+      // Remove existing +91 if present
+      if (phone.startsWith("+91")) {
+        phone = phone.substring(3);
+      } else if (phone.startsWith("91") && phone.length === 12) {
+        phone = phone.substring(2);
+      }
+      
+      // Validate Indian phone number (10 digits)
+      const phoneRegex = /^[6-9]\d{9}$/;
+      if (!phoneRegex.test(phone)) {
+        errors.phoneNumber = "Please enter a valid 10-digit Indian phone number";
+      } else {
+        // Format with +91 prefix
+        newAddress.phoneNumber = `+91${phone}`;
       }
     }
     if (!newAddress.houseFlatNo.trim()) errors.houseFlatNo = "House/Flat number is required";
@@ -111,12 +126,13 @@ export default function SelectAddressPage() {
           const newAddrId = newAddr._id || newAddr.id;
           setSelectedAddressId(String(newAddrId));
         }
+        toast.success("Address saved successfully!");
       } else {
-        alert(data.error || "Failed to save address");
+        toast.error(data.error || "Failed to save address");
       }
     } catch (err) {
       console.error("Error saving address:", err);
-      alert("Failed to save address. Please try again.");
+      toast.error("Failed to save address. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -124,7 +140,7 @@ export default function SelectAddressPage() {
 
   const handleContinue = () => {
     if (!selectedAddressId) {
-      alert("Please select an address");
+      toast.error("Please select an address");
       return;
     }
 
@@ -135,13 +151,13 @@ export default function SelectAddressPage() {
     });
     
     if (!selectedAddress) {
-      alert("Please select a valid address");
+      toast.error("Please select a valid address");
       return;
     }
 
     // Validate phone number from selected address
     if (!selectedAddress.phoneNumber || selectedAddress.phoneNumber.trim() === "") {
-      alert("Selected address must have a phone number");
+      toast.error("Selected address must have a phone number");
       return;
     }
 
@@ -181,6 +197,14 @@ export default function SelectAddressPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
       
+      {/* ===== Back Button ===== */}
+      <div className="w-full max-w-4xl mb-4">
+        <Link href="/cart" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Cart
+        </Link>
+      </div>
+
       {/* ===== Title ===== */}
       <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1f3b2c] mb-8">
         Select Delivery Address
@@ -235,7 +259,7 @@ export default function SelectAddressPage() {
         {!showNew ? (
           <button
             onClick={() => setShowNew(true)}
-            className="cursor-pointer flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] mt-8 font-medium transition-all"
+            className="cursor-pointer flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] mt-8 font-medium transition-all active:scale-95"
           >
             <PlusCircle className="w-5 h-5" /> Add New Address
           </button>
@@ -258,7 +282,7 @@ export default function SelectAddressPage() {
                     state: "",
                   });
                 }}
-                className="text-[#3b4a3f] hover:text-[#244d38]"
+                className="text-[#3b4a3f] hover:text-[#244d38] cursor-pointer active:scale-95 transition-transform"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -298,8 +322,8 @@ export default function SelectAddressPage() {
                   Phone Number <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type="text"
-                  placeholder="Phone Number"
+                  type="tel"
+                  placeholder="10-digit Indian phone number"
                   value={newAddress.phoneNumber}
                   onChange={(e) => setNewAddress({ ...newAddress, phoneNumber: e.target.value })}
                   className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c] ${
@@ -307,8 +331,10 @@ export default function SelectAddressPage() {
                   }`}
                   required
                 />
-                {formErrors.phoneNumber && (
+                {formErrors.phoneNumber ? (
                   <p className="text-red-500 text-xs mt-1">{formErrors.phoneNumber}</p>
+                ) : (
+                  <p className="text-xs text-[#3b4a3f] mt-1">Enter 10-digit number (will be formatted as +91)</p>
                 )}
               </div>
               <div>
@@ -393,7 +419,7 @@ export default function SelectAddressPage() {
             <button
               onClick={handleSaveAddress}
               disabled={saving}
-              className="cursor-pointer mt-2 py-2.5 px-6 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="cursor-pointer mt-2 py-2.5 px-6 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
             >
               {saving ? "Saving..." : "Save Address"}
             </button>
@@ -403,14 +429,12 @@ export default function SelectAddressPage() {
         {/* ===== Continue Button ===== */}
         {addresses.length > 0 && (
           <div className="mt-10 flex justify-end">
-            <Link href="/payment">
             <button
               onClick={handleContinue}
-              className="cursor-pointer px-8 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+              className="cursor-pointer px-8 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 active:scale-95"
             >
               Continue to Payment
             </button>
-            </Link>
           </div>  
         )}
       </div>

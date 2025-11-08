@@ -4,10 +4,20 @@ import Admin from "../../models/Admin";
 export async function POST(req) {
   try {
     await dbConnect();
-    const { email, password, name } = await req.json();
+    const { email, password, name, passkey } = await req.json();
 
     if (!email || !password) {
       return new Response(JSON.stringify({ error: "Email and password are required" }), { status: 400 });
+    }
+
+    // Verify admin passkey
+    const adminPasskey = process.env.ADMIN_PASSKEY;
+    if (!adminPasskey) {
+      return new Response(JSON.stringify({ error: "Admin passkey not configured" }), { status: 500 });
+    }
+
+    if (!passkey || passkey !== adminPasskey) {
+      return new Response(JSON.stringify({ error: "Invalid admin passkey" }), { status: 401 });
     }
 
     // Check if admin already exists
@@ -39,4 +49,6 @@ export async function POST(req) {
     return new Response(JSON.stringify({ error: "Failed to create admin account" }), { status: 500 });
   }
 }
+
+
 

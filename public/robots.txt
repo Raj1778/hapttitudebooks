@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /affiliate/
+Disallow: /api/
+
+Sitemap: https://hapttitude-books.com/sitemap.xml
+
+
+

@@ -1,6 +1,9 @@
 import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/User";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function POST(req) {
   try {
     await dbConnect();
@@ -10,20 +13,24 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: "Email required" }), { status: 400 });
     }
 
-    const user = await User.findOne({ email });
+    // Use lean() and select only needed fields for better performance
+    const user = await User.findOne({ email }).select("addresses").lean();
     if (!user) {
-      return new Response(JSON.stringify({ success: true, addresses: [] }), { status: 200 });
+      return new Response(JSON.stringify({ success: true, addresses: [] }), { 
+        status: 200,
+        headers: {
+          'Cache-Control': 'no-store, must-revalidate',
+          'Content-Type': 'application/json',
+        }
+      });
     }
 
-    // Initialize addresses if it doesn't exist (for existing users without addresses field)
-    if (!user.addresses) {
-      user.addresses = [];
-      await user.save();
-    }
-
-    // Convert addresses to plain objects to ensure _id is included and properly serialized
-    const addressesArray = user.addresses.map(addr => {
-      const addrObj = addr.toObject ? addr.toObject() : addr;
+    // Initialize addresses if it doesn't exist
+    const addresses = user.addresses || [];
+    
+    // Convert addresses to plain objects
+    const addressesArray = addresses.map(addr => {
+      const addrObj = typeof addr === 'object' ? addr : {};
       // Ensure _id is a string
       if (addrObj._id) {
         addrObj._id = String(addrObj._id);
@@ -31,7 +38,13 @@ export async function POST(req) {
       return addrObj;
     });
 
-    return new Response(JSON.stringify({ success: true, addresses: addressesArray }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, addresses: addressesArray }), { 
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store, must-revalidate',
+        'Content-Type': 'application/json',
+      }
+    });
   } catch (error) {
     console.error("Error fetching addresses:", error);
     return new Response(JSON.stringify({ error: "Failed to fetch addresses" }), { status: 500 });

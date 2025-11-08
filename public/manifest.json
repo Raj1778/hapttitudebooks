@@ -1,0 +1,20 @@
+{
+  "name": "Hapttitude Books",
+  "short_name": "Hapttitude",
+  "description": "Discover transformative books that empower your mind, embrace your emotions, and build inner peace",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e8f3ec",
+  "theme_color": "#244d38",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
+
+
+

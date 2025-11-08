@@ -1,9 +1,19 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export default function BookPage() {
   return (
     <div className="h-screen bg-[#f9f7f4] flex flex-col items-center justify-center px-6 md:px-20 overflow-hidden">
       
+      {/* ===== Back Button ===== */}
+      <div className="w-full max-w-6xl mb-4 absolute top-4 left-6 md:left-20">
+        <Link href="/" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Home
+        </Link>
+      </div>
+
       {/* ====== Main Container ====== */}
       <div className="w-full max-w-6xl flex flex-col md:flex-row gap-6 relative">
         

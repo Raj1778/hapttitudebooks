@@ -26,9 +26,13 @@ const orderSchema = new mongoose.Schema({
   total: { type: Number, required: true },
   status: { type: String, default: "Pending", enum: ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"] },
   paymentMethod: { type: String, required: true },
+  razorpayOrderId: { type: String, default: "" },
+  razorpayPaymentId: { type: String, default: "" },
+  razorpaySignature: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
 
 export default mongoose.models.Order || mongoose.model("Order", orderSchema);
+
 

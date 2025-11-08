@@ -2,6 +2,9 @@ import dbConnect from "../../utils/dbConnect";
 import Order from "../../models/Order";
 import User from "../../models/User";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(req) {
   try {
     await dbConnect();
@@ -71,10 +74,19 @@ export async function GET(req) {
         recentOrders,
         revenueByMonth
       }
-    }), { status: 200 });
+    }), { 
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store, must-revalidate',
+        'Content-Type': 'application/json',
+      }
+    });
   } catch (error) {
     console.error("Error fetching admin stats:", error);
     return new Response(JSON.stringify({ error: "Failed to fetch stats" }), { status: 500 });
   }
 }
+
+
+
 

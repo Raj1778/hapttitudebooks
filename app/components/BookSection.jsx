@@ -26,16 +26,16 @@ const BookSection = () => {
 
         {/* Book Cards */}
         <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-12 lg:gap-20 xl:gap-28">
-          <Link href="/book1" className="transform transition-transform duration-300 hover:scale-[1.02]">
-            <BookCard img="/book1.jpg" name="Hapttitude Waves" price="₹499" />
+          <Link href="/hapttitude-wave1" className="transform transition-transform duration-300 hover:scale-[1.02]">
+            <BookCard img="/book1.jpg" name="Hapttitude Wave 1" price="₹499" />
           </Link>
           
-          <Link href="/book1" className="transform transition-transform duration-300 hover:scale-[1.02]">
-            <BookCard img="/book2.png" name="Digital Rain" price="₹599" />
+          <Link href="/hapttitude-wave2" className="transform transition-transform duration-300 hover:scale-[1.02]">
+            <BookCard img="/book2.png" name="Hapttitude Wave 2" price="₹599" />
           </Link>
           
-          <Link href="/book1" className="transform transition-transform duration-300 hover:scale-[1.02]">
-            <BookCard img="/book1.jpg" name="Parallel Minds" price="₹399" />
+          <Link href="/hapttitude-wave3" className="transform transition-transform duration-300 hover:scale-[1.02]">
+            <BookCard img="/book1.jpg" name="Hapttitude Wave 3" price="₹399" />
           </Link>
         </div>
       </div>

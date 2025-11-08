@@ -1,8 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ExternalLink, X } from "lucide-react";
+import { ExternalLink, X, ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import toast from "react-hot-toast";
 import {
   InputOTP,
   InputOTPGroup,
@@ -16,6 +18,32 @@ export default function BookPage() {
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
+  
+  // Structured data for SEO
+  const bookStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Book",
+    "name": "Hapttitude Wave 1",
+    "description": "When waves of thought become waves of light, the world transforms. Follow Aryan as he uncovers the hidden science behind human emotions, and how they ripple through the universe.",
+    "author": {
+      "@type": "Person",
+      "name": "Aryan"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "WavePrint Publications"
+    },
+    "inLanguage": "en-IN",
+    "bookFormat": "Paperback",
+    "numberOfPages": 368,
+    "isbn": "978-1-23456-789-0",
+    "offers": {
+      "@type": "Offer",
+      "price": "499",
+      "priceCurrency": "INR",
+      "availability": "https://schema.org/InStock"
+    }
+  };
   const [otpSent, setOtpSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
@@ -70,14 +98,14 @@ export default function BookPage() {
           router.push("/cart");
         } else {
           const cartData = await cartRes.json();
-          alert(cartData.error || "Failed to add to cart");
+          toast.error(cartData.error || "Failed to add to cart");
         }
       } else {
-        alert("Product not found. Please seed products first.");
+        toast.error("Product not found. Please seed products first.");
       }
     } catch (err) {
       console.error("Error adding to cart:", err);
-      alert("Error adding to cart: " + err.message);
+      toast.error("Error adding to cart: " + err.message);
     }
   };
 
@@ -116,7 +144,10 @@ export default function BookPage() {
 
   // ====== Send OTP ======
   const sendOtp = async () => {
-    if (!email) return alert("Enter a valid email address");
+    if (!email) {
+      toast.error("Enter a valid email address");
+      return;
+    }
     try {
       const res = await fetch("/api/user/send-otp", {
         method: "POST",
@@ -127,20 +158,23 @@ export default function BookPage() {
       if (!res.ok) throw new Error(data.error || "Failed to send OTP");
       setOtpSent(true);
       if (data.previewUrl) {
-        alert(`OTP sent (dev preview): ${data.previewUrl}`);
+        toast.success(`OTP sent (dev preview): ${data.previewUrl}`);
         console.log("Preview URL:", data.previewUrl);
       } else {
-        alert("OTP sent to " + email);
+        toast.success(`OTP sent to ${email}`);
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to send OTP: " + err.message);
+      toast.error("Failed to send OTP: " + err.message);
     }
   };
 
   // ====== Verify OTP ======
   const verifyOtp = async () => {
-    if (!otp || otp.length < 6) return alert("Enter 6-digit OTP");
+    if (!otp || otp.length < 6) {
+      toast.error("Enter 6-digit OTP");
+      return;
+    }
 
     try {
       await confirmationResult.confirm(otp);
@@ -154,19 +188,34 @@ export default function BookPage() {
 
       const data = await res.json();
       if (data.success) {
-        alert("Phone verified successfully!");
+        toast.success("Phone verified successfully!");
         setShowOtpModal(false);
       } else {
-        alert("User verification failed");
+        toast.error("User verification failed");
       }
     } catch (err) {
       console.error(err);
-      alert("Invalid OTP");
+      toast.error("Invalid OTP");
     }
   };
 
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(bookStructuredData),
+        }}
+      />
     <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center justify-start md:justify-center px-4 sm:px-6 lg:px-20 pt-8 md:py-2">
+
+      {/* ===== Back Button ===== */}
+      <div className="w-full max-w-6xl mb-4 mt-4">
+        <Link href="/" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Home
+        </Link>
+      </div>
 
       {/* ====== Main Container ====== */}
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-6 lg:gap-8 relative mb-6 md:mb-0">
@@ -300,7 +349,10 @@ export default function BookPage() {
                 </div>
                 <button
                   onClick={async () => {
-                    if (!otp || otp.length < 6) return alert("Enter 6-digit OTP");
+                    if (!otp || otp.length < 6) {
+                      toast.error("Enter 6-digit OTP");
+                      return;
+                    }
                     try {
                       // Verify OTP
                       const verifyRes = await fetch("/api/user/verify", {
@@ -318,10 +370,10 @@ export default function BookPage() {
                       // Add book to cart
                       await addBookToCart(email);
                       
-                      alert("Email verified successfully!");
+                      toast.success("Email verified successfully!");
                       setShowOtpModal(false);
                     } catch (err) {
-                      alert(err.message);
+                      toast.error(err.message);
                     }
                   }}
                   className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
@@ -335,5 +387,6 @@ export default function BookPage() {
       )}
 
     </div>
+    </>
   );
 }

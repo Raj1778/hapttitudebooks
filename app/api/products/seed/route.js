@@ -6,18 +6,18 @@ export async function POST(req) {
 
   const products = [
     {
-      name: "Hapttitude Waves",
+      name: "Hapttitude Wave 1",
       author: "Pretty Bhalla",
       price: 499,
       image: "/book1.jpg",
-      description: "Step into a world where emotions shape reality. 'Hapttitude Waves' is a tale of discovery, resilience, and the mysterious bond between thought and energy.",
+      description: "Step into a world where emotions shape reality. 'Hapttitude Wave 1' is a tale of discovery, resilience, and the mysterious bond between thought and energy.",
       language: "English (India & Global)",
       pages: "368 pages, Paperback edition",
       publisher: "WavePrint Publications",
       isbn: "978-1-23456-789-0",
     },
     {
-      name: "Digital Rain",
+      name: "Hapttitude Wave 2",
       author: "Pretty Bhalla",
       price: 599,
       image: "/book2.png",
@@ -28,7 +28,7 @@ export async function POST(req) {
       isbn: "978-1-23456-789-1",
     },
     {
-      name: "Parallel Minds",
+      name: "Hapttitude Wave 3",
       author: "Pretty Bhalla",
       price: 399,
       image: "/book1.jpg",
