@@ -1,4 +1,4 @@
-import dbConnect from "../../../utils/dbConnect";
+import dbConnect from "../../utils/dbConnect";
 import AffiliateClick from "../../models/AffiliateClick";
 import Affiliate from "../../models/Affiliate";
 
