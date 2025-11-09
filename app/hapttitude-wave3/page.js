@@ -115,9 +115,34 @@ export default function BookPage() {
   const handleBuyNow = async () => {
     const savedEmail = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
     
+    // Get product ID first
+    let productId = null;
+    try {
+      const productRes = await fetch("/api/products/get", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "Hapttitude Wave 3" }),
+      });
+      const productData = await productRes.json();
+      if (productRes.ok && productData.product) {
+        productId = productData.product._id;
+      }
+    } catch (err) {
+      console.error("Error fetching product:", err);
+    }
+    
     if (savedEmail && isVerified) {
-      // User is already verified, add to cart directly
-      await addBookToCart(savedEmail);
+      // User is already verified, store product ID and redirect immediately
+      if (productId && typeof window !== "undefined") {
+        sessionStorage.setItem("pendingBookId", productId);
+      }
+      router.push("/select-address");
+      // Add to cart in background
+      if (productId) {
+        addBookToCart(savedEmail).catch(err => {
+          console.error("Error adding to cart:", err);
+        });
+      }
     } else if (savedEmail) {
       // Email exists but not verified, check server
       try {
@@ -129,18 +154,39 @@ export default function BookPage() {
         const data = await res.json();
         if (res.ok && data.isVerified) {
           setIsVerified(true);
-          await addBookToCart(savedEmail);
+          // Store product ID and redirect immediately
+          if (productId && typeof window !== "undefined") {
+            sessionStorage.setItem("pendingBookId", productId);
+          }
+          router.push("/select-address");
+          // Add to cart in background
+          if (productId) {
+            addBookToCart(savedEmail).catch(err => {
+              console.error("Error adding to cart:", err);
+            });
+          }
         } else {
           // Need to verify
           setShowOtpModal(true);
           setEmail(savedEmail);
+          // Store product ID for later
+          if (productId && typeof window !== "undefined") {
+            sessionStorage.setItem("pendingBookId", productId);
+          }
         }
       } catch (err) {
         setShowOtpModal(true);
+        if (productId && typeof window !== "undefined") {
+          sessionStorage.setItem("pendingBookId", productId);
+        }
       }
     } else {
       // No email saved, show OTP modal
       setShowOtpModal(true);
+      // Store product ID for later
+      if (productId && typeof window !== "undefined") {
+        sessionStorage.setItem("pendingBookId", productId);
+      }
     }
   };
 
@@ -227,7 +273,7 @@ export default function BookPage() {
           <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
             <button
               onClick={handleBuyNow}
-              className="px-7 py-2.5 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 flex items-center gap-2"
+              className="px-7 py-2.5 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-200 flex items-center gap-2 active:scale-95 transform"
             >
               <span>Buy now</span>
               <ExternalLink className="w-4 h-4" />
@@ -306,7 +352,7 @@ export default function BookPage() {
                 />
                 <button
                   onClick={sendOtp}
-                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-200 active:scale-95 transform"
                 >
                   Send OTP
                 </button>
@@ -348,16 +394,28 @@ export default function BookPage() {
                       localStorage.setItem("userEmail", email);
                       setIsVerified(true);
                       
-                      // Add book to cart
-                      await addBookToCart(email);
-                      
                       toast.success("Email verified successfully!");
                       setShowOtpModal(false);
+                      
+                      // Get product ID if we have a pending book
+                      const pendingBookId = typeof window !== "undefined" ? sessionStorage.getItem("pendingBookId") : null;
+                      
+                      // Redirect immediately to select address
+                      router.push("/select-address");
+                      
+                      // Add book to cart in background if we have product ID
+                      if (pendingBookId) {
+                        // Product ID already stored, will be handled by select-address page
+                      } else {
+                        addBookToCart(email).catch(err => {
+                          console.error("Error adding to cart:", err);
+                        });
+                      }
                     } catch (err) {
                       toast.error(err.message);
                     }
                   }}
-                  className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+                  className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-200 active:scale-95 transform"
                 >
                   Verify & Continue
                 </button>

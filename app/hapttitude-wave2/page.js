@@ -116,8 +116,13 @@ export default function BookPage() {
     const savedEmail = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
     
     if (savedEmail && isVerified) {
-      // User is already verified, add to cart directly
-      await addBookToCart(savedEmail);
+      // User is already verified, add to cart and redirect immediately
+      router.push("/select-address");
+      // Add to cart in background
+      addBookToCart(savedEmail).catch(err => {
+        console.error("Error adding to cart:", err);
+        toast.error("Error adding to cart");
+      });
     } else if (savedEmail) {
       // Email exists but not verified, check server
       try {
@@ -129,7 +134,13 @@ export default function BookPage() {
         const data = await res.json();
         if (res.ok && data.isVerified) {
           setIsVerified(true);
-          await addBookToCart(savedEmail);
+          // Redirect immediately
+          router.push("/select-address");
+          // Add to cart in background
+          addBookToCart(savedEmail).catch(err => {
+            console.error("Error adding to cart:", err);
+            toast.error("Error adding to cart");
+          });
         } else {
           // Need to verify
           setShowOtpModal(true);
@@ -227,7 +238,7 @@ export default function BookPage() {
           <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
             <button
               onClick={handleBuyNow}
-              className="px-7 py-2.5 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 flex items-center gap-2"
+              className="px-7 py-2.5 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-200 flex items-center gap-2 active:scale-95 transform"
             >
               <span>Buy now</span>
               <ExternalLink className="w-4 h-4" />
@@ -304,7 +315,7 @@ export default function BookPage() {
                 />
                 <button
                   onClick={sendOtp}
-                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-200 active:scale-95 transform"
                 >
                   Send OTP
                 </button>
@@ -346,16 +357,28 @@ export default function BookPage() {
                       localStorage.setItem("userEmail", email);
                       setIsVerified(true);
                       
-                      // Add book to cart
-                      await addBookToCart(email);
-                      
                       toast.success("Email verified successfully!");
                       setShowOtpModal(false);
+                      
+                      // Get product ID if we have a pending book
+                      const pendingBookId = typeof window !== "undefined" ? sessionStorage.getItem("pendingBookId") : null;
+                      
+                      // Redirect immediately to select address
+                      router.push("/select-address");
+                      
+                      // Add book to cart in background if we have product ID
+                      if (pendingBookId) {
+                        // Product ID already stored, will be handled by select-address page
+                      } else {
+                        addBookToCart(email).catch(err => {
+                          console.error("Error adding to cart:", err);
+                        });
+                      }
                     } catch (err) {
                       toast.error(err.message);
                     }
                   }}
-                  className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+                  className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-200 active:scale-95 transform"
                 >
                   Verify & Continue
                 </button>

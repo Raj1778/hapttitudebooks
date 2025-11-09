@@ -50,7 +50,7 @@ const Navbar = () => {
             className="hover:text-green-300 transition-colors"
             aria-label="Profile"
           >
-            <User size={24} />
+            <User size={32} />
           </button>
           
           {showDropdown && (

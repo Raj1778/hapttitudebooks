@@ -9,3 +9,10 @@ html {
 html::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+/* ===== Button Click Animation ===== */
+button:active,
+a:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease-in-out;
+}

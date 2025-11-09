@@ -1,3 +1,5 @@
+"use client";
+import { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import HeaderBackground from "./components/HeaderBackground";
@@ -5,6 +7,47 @@ import Author from "./components/Author";
 import BookSection from "./components/BookSection";
 
 export default function Home() {
+  useEffect(() => {
+    // Track affiliate clicks from URL parameter
+    const trackAffiliateClick = async () => {
+      if (typeof window === "undefined") return;
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const affiliateCode = urlParams.get("ref");
+      
+      if (affiliateCode) {
+        try {
+          // Check if we've already tracked this click in this session
+          const tracked = sessionStorage.getItem(`affiliateTracked_${affiliateCode}`);
+          if (tracked) {
+            // Already tracked, skip but still store for order tracking
+            sessionStorage.setItem("affiliateCode", affiliateCode);
+            return;
+          }
+          
+          // Store affiliate code in sessionStorage for order tracking
+          sessionStorage.setItem("affiliateCode", affiliateCode);
+          
+          // Track the click
+          const response = await fetch("/api/affiliate/track-click", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ affiliateCode }),
+          });
+          
+          if (response.ok) {
+            // Mark as tracked to prevent duplicates
+            sessionStorage.setItem(`affiliateTracked_${affiliateCode}`, "true");
+          }
+        } catch (error) {
+          console.error("Error tracking affiliate click:", error);
+        }
+      }
+    };
+
+    trackAffiliateClick();
+  }, []);
+
   return (
     <>
     <div className="relative flex items-center justify-center min-h-screen text-white">

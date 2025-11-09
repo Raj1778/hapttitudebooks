@@ -4,6 +4,7 @@ import { MapPin, Home, PlusCircle, X, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { SelectAddressSkeleton } from "../components/Skeleton";
 
 export default function SelectAddressPage() {
   const router = useRouter();
@@ -27,6 +28,21 @@ export default function SelectAddressPage() {
   });
   const [formErrors, setFormErrors] = useState({});
 
+  const addPendingBookToCart = async (email, productId) => {
+    try {
+      const res = await fetch("/api/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, productId, quantity: 1 }),
+      });
+      if (!res.ok) {
+        console.error("Error adding pending book to cart");
+      }
+    } catch (err) {
+      console.error("Error adding pending book to cart:", err);
+    }
+  };
+
   useEffect(() => {
     const email = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
     if (!email) {
@@ -35,7 +51,19 @@ export default function SelectAddressPage() {
       return;
     }
     setUserEmail(email);
-    fetchAddresses(email);
+    
+    // Check if we need to add a book to cart (coming from Buy Now)
+    const pendingBookId = typeof window !== "undefined" ? sessionStorage.getItem("pendingBookId") : null;
+    if (pendingBookId) {
+      // Add book to cart first, then fetch addresses
+      addPendingBookToCart(email, pendingBookId).then(() => {
+        sessionStorage.removeItem("pendingBookId");
+        fetchAddresses(email);
+      });
+    } else {
+      fetchAddresses(email);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchAddresses = async (email) => {
@@ -174,6 +202,10 @@ export default function SelectAddressPage() {
     if (type === "office") return <MapPin className="w-5 h-5" />;
     return <MapPin className="w-5 h-5" />;
   };
+
+  if (loading) {
+    return <SelectAddressSkeleton />;
+  }
 
   const formatAddress = (address) => {
     const parts = [
