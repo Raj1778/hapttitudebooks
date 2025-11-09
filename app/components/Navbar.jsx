@@ -40,7 +40,7 @@ const Navbar = () => {
           className="hover:text-green-300 transition-colors"
           aria-label="Cart"
         >
-          <ShoppingCart size={24} />
+          <ShoppingCart size={32} />
         </Link>
         
         {/* Profile Dropdown */}

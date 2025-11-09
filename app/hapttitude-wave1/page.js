@@ -211,14 +211,14 @@ export default function BookPage() {
 
         {/* ====== Book Info ====== */}
         <div className="flex flex-col justify-center lg:w-1/2 text-center lg:text-left">
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-[#1f3b2c]">
+          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-[#1f3b2c] ">
             Hapttitude Wave 1
           </h1>
-          <p className="text-lg text-[#3a5a45] mt-2 font-medium sm:pb-2 md:pb-4 ">by Pretty Bhalla</p>
+          <p className="text-lg text-[#3a5a45] mt-2 font-medium sm:pb-3 md:pb-6 mx-1">by Pretty Bhalla</p>
          
            <div>
-          <p className="text-sm font-semibold text-[#244d38] mb-3">For Classes: 3rd to 5th | Ages: 7–10</p>
-          <p className="text-[#1f3b2c] font-semibold mb-2">Focus:</p>
+          <p className="text-sm font-semibold text-[#244d38] sm:mb-2 md:mb-4">For Classes: 3rd to 5th | Ages: 7–10</p>
+          <p className="text-[#1f3b2c] font-semibold">Focus:</p>
           <p className="text-[#3b4a3f] leading-relaxed">Emotional awareness, identifying feelings, confidence building.</p>
         </div>
         
