@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ExternalLink, X, ArrowLeft } from "lucide-react";
+import { ExternalLink, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -11,6 +11,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "../components/input-otp";
+import BackButton from "../components/BackButton";
 
 
 export default function BookPage() {
@@ -18,6 +19,9 @@ export default function BookPage() {
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
+  const [isProcessingPurchase, setIsProcessingPurchase] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   
   // Structured data for SEO
   const bookStructuredData = {
@@ -111,11 +115,18 @@ export default function BookPage() {
 
   // Handle Buy Now button click
   const handleBuyNow = async () => {
+    if (isProcessingPurchase) return;
+    setIsProcessingPurchase(true);
+
     const savedEmail = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
     
     if (savedEmail && isVerified) {
-      // User is already verified, add to cart directly
-      await addBookToCart(savedEmail);
+      try {
+        await addBookToCart(savedEmail);
+      } finally {
+        setIsProcessingPurchase(false);
+      }
+      return;
     } else if (savedEmail) {
       // Email exists but not verified, check server
       try {
@@ -128,27 +139,39 @@ export default function BookPage() {
         if (res.ok && data.isVerified) {
           setIsVerified(true);
           await addBookToCart(savedEmail);
+          setIsProcessingPurchase(false);
+          return;
         } else {
           // Need to verify
           setShowOtpModal(true);
           setEmail(savedEmail);
+          setIsProcessingPurchase(false);
+          return;
         }
       } catch (err) {
         setShowOtpModal(true);
+        setIsProcessingPurchase(false);
+        return;
       }
     } else {
       // No email saved, show OTP modal
       setShowOtpModal(true);
+      setIsProcessingPurchase(false);
+      return;
     }
+
+    setIsProcessingPurchase(false);
   };
 
   // ====== Send OTP ======
   const sendOtp = async () => {
+    if (isSendingOtp) return;
     if (!email) {
       toast.error("Enter a valid email address");
       return;
     }
     try {
+      setIsSendingOtp(true);
       const res = await fetch("/api/user/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -166,36 +189,40 @@ export default function BookPage() {
     } catch (err) {
       console.error(err);
       toast.error("Failed to send OTP: " + err.message);
+    } finally {
+      setIsSendingOtp(false);
     }
   };
 
-  // ====== Verify OTP ======
-  const verifyOtp = async () => {
+  const handleVerifyOtp = async () => {
+    if (isVerifyingOtp) return;
+
     if (!otp || otp.length < 6) {
       toast.error("Enter 6-digit OTP");
       return;
     }
 
     try {
-      await confirmationResult.confirm(otp);
-
-      // Call backend to mark user as verified
-      const res = await fetch("/api/user/verify", {
+      setIsVerifyingOtp(true);
+      const verifyRes = await fetch("/api/user/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mobile }),
+        body: JSON.stringify({ email, otp }),
       });
+      const verifyData = await verifyRes.json();
+      if (!verifyRes.ok) throw new Error(verifyData.error || "Verification failed");
 
-      const data = await res.json();
-      if (data.success) {
-        toast.success("Phone verified successfully!");
-        setShowOtpModal(false);
-      } else {
-        toast.error("User verification failed");
-      }
+      localStorage.setItem("userEmail", email);
+      setIsVerified(true);
+
+      await addBookToCart(email);
+
+      toast.success("Email verified successfully!");
+      setShowOtpModal(false);
     } catch (err) {
-      console.error(err);
-      toast.error("Invalid OTP");
+      toast.error(err.message);
+    } finally {
+      setIsVerifyingOtp(false);
     }
   };
 
@@ -211,10 +238,7 @@ export default function BookPage() {
 
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-6xl mb-4 mt-4">
-        <Link href="/" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
+        <BackButton fallbackHref="/" label="Back to Home" />
       </div>
 
       {/* ====== Main Container ====== */}
@@ -258,9 +282,10 @@ export default function BookPage() {
           <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
             <button
               onClick={handleBuyNow}
-              className="px-7 py-2.5 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 flex items-center gap-2"
+              disabled={isProcessingPurchase}
+              className="px-7 py-2.5 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <span>Buy now</span>
+              <span>{isProcessingPurchase ? "Please wait..." : "Buy now"}</span>
               <ExternalLink className="w-4 h-4" />
             </button>
           </div>
@@ -325,9 +350,10 @@ export default function BookPage() {
                 />
                 <button
                   onClick={sendOtp}
-                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+                  disabled={isSendingOtp}
+                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Send OTP
+                  {isSendingOtp ? "Sending OTP..." : "Send OTP"}
                 </button>
               </>
             ) : (
@@ -348,37 +374,11 @@ export default function BookPage() {
                   </InputOTP>
                 </div>
                 <button
-                  onClick={async () => {
-                    if (!otp || otp.length < 6) {
-                      toast.error("Enter 6-digit OTP");
-                      return;
-                    }
-                    try {
-                      // Verify OTP
-                      const verifyRes = await fetch("/api/user/verify", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email, otp }),
-                      });
-                      const verifyData = await verifyRes.json();
-                      if (!verifyRes.ok) throw new Error(verifyData.error || "Verification failed");
-                      
-                      // Store email in localStorage and mark as verified
-                      localStorage.setItem("userEmail", email);
-                      setIsVerified(true);
-                      
-                      // Add book to cart
-                      await addBookToCart(email);
-                      
-                      toast.success("Email verified successfully!");
-                      setShowOtpModal(false);
-                    } catch (err) {
-                      toast.error(err.message);
-                    }
-                  }}
-                  className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300"
+                  onClick={handleVerifyOtp}
+                  disabled={isVerifyingOtp}
+                  className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Verify & Continue
+                  {isVerifyingOtp ? "Verifying..." : "Verify & Continue"}
                 </button>
               </>
             )}

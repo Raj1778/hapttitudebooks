@@ -1,13 +1,28 @@
 import dbConnect from "../../utils/dbConnect";
 import AffiliateClick from "../../models/AffiliateClick";
 import Affiliate from "../../models/Affiliate";
+import { rateLimit } from "../../utils/rateLimit";
+import { sanitizeObject, validateString, isAllowedOrigin } from "../../utils/security";
+
+const checkRate = rateLimit({ windowMs: 60_000, max: 60 });
 
 export async function POST(req) {
   try {
-    await dbConnect();
-    const { affiliateCode } = await req.json();
+    const origin = req.headers.get("origin");
+    if (!isAllowedOrigin(origin)) {
+      return new Response(JSON.stringify({ error: "Origin not allowed" }), { status: 403 });
+    }
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const rl = await checkRate("/api/affiliate/track-click", ip);
+    if (!rl.ok) {
+      return new Response(JSON.stringify({ error: "Too many requests" }), { status: 429 });
+    }
 
-    if (!affiliateCode) {
+    await dbConnect();
+    const body = sanitizeObject(await req.json());
+    const { affiliateCode } = body || {};
+
+    if (!validateString(affiliateCode, { min: 3, max: 64, pattern: /^[A-Za-z0-9_-]+$/ })) {
       return new Response(JSON.stringify({ error: "Affiliate code is required" }), { status: 400 });
     }
 

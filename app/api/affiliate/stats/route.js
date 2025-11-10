@@ -7,10 +7,23 @@ export const revalidate = 0;
 
 export async function POST(req) {
   try {
-    await dbConnect();
-    const { affiliateCode } = await req.json();
+    const origin = req.headers.get("origin");
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const { rateLimit } = await import("../../utils/rateLimit");
+    const { sanitizeObject, validateString, isAllowedOrigin } = await import("../../utils/security");
+    const checkRate = rateLimit({ windowMs: 60_000, max: 60 });
+    if (!isAllowedOrigin(origin)) {
+      return new Response(JSON.stringify({ error: "Origin not allowed" }), { status: 403 });
+    }
+    const rl = await checkRate("/api/affiliate/stats", ip);
+    if (!rl.ok) {
+      return new Response(JSON.stringify({ error: "Too many requests" }), { status: 429 });
+    }
 
-    if (!affiliateCode) {
+    await dbConnect();
+    const { affiliateCode } = sanitizeObject(await req.json());
+
+    if (!validateString(affiliateCode, { min: 3, max: 64, pattern: /^[A-Za-z0-9_-]+$/ })) {
       return new Response(JSON.stringify({ error: "Affiliate code is required" }), { status: 400 });
     }
 

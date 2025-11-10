@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { CartSkeleton } from "../components/Skeleton";
+import BackButton from "../components/BackButton";
 
 export default function CartPage() {
   const router = useRouter();
@@ -211,10 +212,7 @@ export default function CartPage() {
       
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-6xl mb-4">
-        <Link href="/hapttitude-wave1" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Book Page
-        </Link>
+        <BackButton fallbackHref="/hapttitude-wave1" label="Back to Book Page" />
       </div>
 
       {/* ===== Title ===== */}

@@ -10,7 +10,7 @@ const BookCard = ({ img, name = "Hapttitude Waves", price = "₹499" }) => {
           src={img || "/book1.jpg"}
           alt="Book Cover"
           fill
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className="object-fill transition-transform duration-500 ease-out group-hover:scale-105"
         />
         {/* Subtle overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
@@ -19,7 +19,7 @@ const BookCard = ({ img, name = "Hapttitude Waves", price = "₹499" }) => {
       </div>
 
       {/* ===== Book Info ===== */}
-      <div className="mt-4 text-center bg-green-900 px-4 py-2 rounded-full ">
+      <div className="mt-4 md:mt-6 lg:mt-8 text-center bg-green-900 px-4 py-2 rounded-full  ">
         <h3 className="text-lg font-semibold text-white/90 group-hover:text-white transition-colors">
           Learn more 
         </h3>

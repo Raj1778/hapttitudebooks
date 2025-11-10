@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import BackButton from "../components/BackButton";
 
 export default function AboutUsPage() {
   return (
@@ -8,10 +8,7 @@ export default function AboutUsPage() {
       <div className="max-w-6xl mx-auto">
         {/* Back Button */}
         <div className="mb-8">
-          <Link href="/" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
+          <BackButton fallbackHref="/" label="Back to Home" />
         </div>
 
         {/* Header */}

@@ -7,6 +7,13 @@ export const revalidate = 0;
 
 export async function GET(req) {
   try {
+    // Simple admin protection using an API key (set ADMIN_API_KEY)
+    const adminKey = process.env.ADMIN_API_KEY;
+    const provided = req.headers.get("x-admin-key");
+    if (adminKey && provided !== adminKey) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     await dbConnect();
 
     // Get all affiliates

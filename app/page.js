@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import HeaderBackground from "./components/HeaderBackground";
 import Author from "./components/Author";
 import BookSection from "./components/BookSection";
+import Footer from "./components/Footer";
 
 export default function Home() {
   useEffect(() => {
@@ -60,6 +61,7 @@ export default function Home() {
     </div>
       <BookSection/>
       <Author/>
+      <Footer></Footer>
     </>
   );
 }

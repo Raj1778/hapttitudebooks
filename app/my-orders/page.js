@@ -2,9 +2,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Package, Calendar, MapPin, Phone, Receipt, ArrowLeft } from "lucide-react";
+import { Package, Calendar, MapPin, Phone, Receipt } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import BackButton from "../components/BackButton";
 
 export default function MyOrdersPage() {
   const router = useRouter();
@@ -118,10 +119,7 @@ export default function MyOrdersPage() {
       
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-4xl mb-4">
-        <Link href="/" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
+        <BackButton fallbackHref="/" label="Back to Home" />
       </div>
 
       {/* ===== Title ===== */}

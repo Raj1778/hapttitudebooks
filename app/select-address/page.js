@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { MapPin, Home, PlusCircle, X, ArrowLeft } from "lucide-react";
+import { MapPin, Home, PlusCircle, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import toast from "react-hot-toast";
 import { SelectAddressSkeleton } from "../components/Skeleton";
+import BackButton from "../components/BackButton";
 
 export default function SelectAddressPage() {
   const router = useRouter();
@@ -14,6 +14,7 @@ export default function SelectAddressPage() {
   const [showNew, setShowNew] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [isContinuing, setIsContinuing] = useState(false);
   
   // New address form state
   const [newAddress, setNewAddress] = useState({
@@ -167,6 +168,8 @@ export default function SelectAddressPage() {
   };
 
   const handleContinue = () => {
+    if (isContinuing) return;
+
     if (!selectedAddressId) {
       toast.error("Please select an address");
       return;
@@ -188,6 +191,8 @@ export default function SelectAddressPage() {
       toast.error("Selected address must have a phone number");
       return;
     }
+
+    setIsContinuing(true);
 
     // Store phone number in localStorage
     if (typeof window !== "undefined") {
@@ -231,10 +236,7 @@ export default function SelectAddressPage() {
       
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-4xl mb-4">
-        <Link href="/cart" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Cart
-        </Link>
+        <BackButton fallbackHref="/cart" label="Back to Cart" />
       </div>
 
       {/* ===== Title ===== */}
@@ -463,9 +465,10 @@ export default function SelectAddressPage() {
           <div className="mt-10 flex justify-end">
             <button
               onClick={handleContinue}
-              className="cursor-pointer px-8 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 active:scale-95"
+              disabled={isContinuing}
+              className="cursor-pointer px-8 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Continue to Payment
+              {isContinuing ? "Continuing..." : "Continue to Payment"}
             </button>
           </div>  
         )}

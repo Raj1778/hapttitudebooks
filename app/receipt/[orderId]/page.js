@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Receipt, Calendar, MapPin, Phone, Package, Download, ArrowLeft } from "lucide-react";
+import { Receipt, Calendar, MapPin, Phone, Package, Download } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import BackButton from "../../components/BackButton";
 
 export default function ReceiptPage() {
   const router = useRouter();
@@ -161,10 +162,7 @@ export default function ReceiptPage() {
       <div className="max-w-4xl mx-auto">
         {/* Header Actions */}
         <div className="flex justify-between items-center mb-6">
-          <Link href="/my-orders" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38]">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Orders
-          </Link>
+          <BackButton fallbackHref="/my-orders" label="Back to Orders" />
         </div>
 
         {/* Receipt Card */}

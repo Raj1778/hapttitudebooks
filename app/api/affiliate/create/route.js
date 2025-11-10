@@ -4,7 +4,15 @@ import Affiliate from "../../models/Affiliate";
 export async function POST(req) {
   try {
     await dbConnect();
-    const { email, password, name, passkey } = await req.json();
+    const { sanitizeObject, validateString } = await import("../../utils/security");
+    const { email, password, name, passkey } = sanitizeObject(await req.json());
+    if (
+      !validateString(email, { max: 200 }) ||
+      !validateString(password, { max: 200 }) ||
+      !validateString(name, { max: 100 })
+    ) {
+      return new Response(JSON.stringify({ error: "Invalid input" }), { status: 400 });
+    }
 
     if (!email || !password || !name) {
       return new Response(JSON.stringify({ error: "Email, password, and name are required" }), { status: 400 });

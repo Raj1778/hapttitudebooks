@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { MapPin, Package, Lock, ArrowLeft } from "lucide-react";
+import { MapPin, Package, Lock } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
+import BackButton from "../components/BackButton";
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -150,6 +150,13 @@ export default function PaymentPage() {
                 razorpayPaymentId: response.razorpay_payment_id,
                 razorpaySignature: response.razorpay_signature,
               };
+              // Attach affiliate code if present
+              if (typeof window !== "undefined") {
+                const affiliateCode = sessionStorage.getItem("affiliateCode");
+                if (affiliateCode) {
+                  order.affiliateCode = affiliateCode;
+                }
+              }
 
               // Save order to database
               const orderRes = await fetch("/api/orders/create", {
@@ -296,10 +303,7 @@ export default function PaymentPage() {
       <div className="max-w-5xl mx-auto">
         {/* Back Button */}
         <div className="mb-4">
-          <Link href="/select-address" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Address Selection
-          </Link>
+          <BackButton fallbackHref="/select-address" label="Back to Address Selection" />
         </div>
 
         {/* Header */}
