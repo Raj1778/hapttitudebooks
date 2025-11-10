@@ -140,7 +140,7 @@ export default function PaymentPage() {
                   name: item.productId?.name || "Unknown",
                   price: item.productId?.price || 0,
                   quantity: item.quantity,
-                  image: item.productId?.image || "/book1.jpg",
+                  image: item.productId?.image || "/wave-1.png",
                   productId: item.productId?._id || null,
                 })),
                 total: total,
@@ -353,7 +353,7 @@ export default function PaymentPage() {
                   return (
                     <div key={item._id || product._id} className="flex items-center gap-4 pb-4 border-b border-[#d5e9dc] last:border-b-0 last:pb-0">
                       <Image
-                        src={product.image || "/book1.jpg"}
+                        src={product.image || "/wave-1.png"}
                         alt={product.name}
                         width={60}
                         height={80}

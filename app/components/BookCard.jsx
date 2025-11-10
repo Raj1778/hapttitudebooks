@@ -7,7 +7,7 @@ const BookCard = ({ img, name = "Hapttitude Waves", price = "₹499" }) => {
       {/* ===== Book Cover ===== */}
       <div className="relative h-48 w-32 sm:h-56 sm:w-40 md:h-64 md:w-48 lg:h-72 lg:w-56 xl:h-80 xl:w-64 overflow-hidden rounded-2xl shadow-lg bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md transition-all duration-500 group-hover:shadow-2xl">
         <Image
-          src={img || "/book1.jpg"}
+          src={img || "/wave-1.png"}
           alt="Book Cover"
           fill
           className="object-fill transition-transform duration-500 ease-out group-hover:scale-105"

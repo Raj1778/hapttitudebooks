@@ -15,7 +15,7 @@ export default function CartPage() {
   const [userEmail, setUserEmail] = useState("");
   const [otherBooks, setOtherBooks] = useState([]);
 
-  // Get user email from localStorage
+  // Get user email from localStorage 
   useEffect(() => {
     const email = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
     setUserEmail(email || "");
@@ -245,7 +245,7 @@ export default function CartPage() {
                 <div key={item._id || product._id} className="flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-[#dbeee1] pb-6 mb-6 last:mb-0 last:border-b-0">
                   <div className="flex items-center gap-6">
                     <Image
-                      src={product.image || "/book1.jpg"}
+                      src={product.image || "/wave-1.jpg"}
                       alt={product.name}
                       width={100}
                       height={140}
@@ -329,7 +329,7 @@ export default function CartPage() {
                 <div key={book._id} className="flex-1 bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60">
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Image
-                      src={book.image || "/book1.jpg"}
+                      src={book.image || "/wave-1.jpg"}
                       alt={book.name}
                       width={120}
                       height={160}

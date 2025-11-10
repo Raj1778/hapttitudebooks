@@ -247,7 +247,7 @@ export default function BookPage() {
         {/* ====== Book Cover - Mobile ====== */}
         <div className="flex justify-center lg:hidden mb-6">
           <Image
-            src="/book1.jpg"
+            src="/wave-1.png"
             alt="Hapttitude Waves"
             width={200}
             height={280}
@@ -259,7 +259,7 @@ export default function BookPage() {
         <div className="hidden lg:block relative lg:w-1/2">
           <div className="absolute bottom-[-80px] left-56 drop-shadow-2xl z-10">
             <Image
-              src="/book1.jpg"
+              src="/wave-1.png"
               alt="Hapttitude Waves"
               width={240}
               height={340}
