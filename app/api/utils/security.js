@@ -1,13 +1,39 @@
-"use server";
-
 // Basic input sanitization to defend against MongoDB query selector injection
 export async function sanitizeObject(obj) {
-  if (obj == null || typeof obj !== "object") return obj;
-  if (Array.isArray(obj)) return obj.map(sanitizeObject);
+  // Handle null/undefined
+  if (obj == null) return obj;
+  
+  // Return primitives (string, number, boolean, etc.) as-is
+  if (typeof obj !== "object") return obj;
+  
+  // Handle arrays
+  if (Array.isArray(obj)) {
+    const results = await Promise.all(obj.map(sanitizeObject));
+    return results;
+  }
+  
+  // Handle Date objects and other special objects
+  if (obj instanceof Date || obj instanceof RegExp) return obj;
+  
+  // Handle plain objects
   const clean = {};
   for (const [key, value] of Object.entries(obj)) {
-    if (key.startsWith("$") || key.includes(".")) continue;
-    clean[key] = sanitizeObject(value);
+    // Skip keys that could be used for MongoDB injection
+    if (key.startsWith("$") || key.includes(".")) {
+      continue;
+    }
+    
+    // Recursively sanitize nested objects/arrays, but return primitives as-is
+    if (value != null && typeof value === "object" && !(value instanceof Date) && !(value instanceof RegExp)) {
+      if (Array.isArray(value)) {
+        clean[key] = await Promise.all(value.map(sanitizeObject));
+      } else {
+        clean[key] = await sanitizeObject(value);
+      }
+    } else {
+      // Return primitives directly (string, number, boolean, null, Date, RegExp)
+      clean[key] = value;
+    }
   }
   return clean;
 }

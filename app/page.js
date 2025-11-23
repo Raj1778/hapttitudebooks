@@ -37,8 +37,14 @@ export default function Home() {
           });
           
           if (response.ok) {
-            // Mark as tracked to prevent duplicates
-            sessionStorage.setItem(`affiliateTracked_${affiliateCode}`, "true");
+            const data = await response.json();
+            if (data.success) {
+              // Mark as tracked to prevent duplicates
+              sessionStorage.setItem(`affiliateTracked_${affiliateCode}`, "true");
+            }
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.error("Failed to track click:", errorData.error || "Unknown error");
           }
         } catch (error) {
           console.error("Error tracking affiliate click:", error);

@@ -1,17 +1,35 @@
 import dbConnect from "../../utils/dbConnect";
 import Admin from "../../models/Admin";
+import { sanitizeObject, validateString } from "../../utils/security";
 
 export async function POST(req) {
   try {
     await dbConnect();
-    const { email, password } = await req.json();
+    const body = await req.json();
+    const sanitized = await sanitizeObject(body);
+    let { email, password } = sanitized || {};
 
+    // Trim whitespace from email and password
+    email = typeof email === "string" ? email.trim() : email;
+    password = typeof password === "string" ? password.trim() : password;
+
+    // Check if email and password exist first
     if (!email || !password) {
       return new Response(JSON.stringify({ error: "Email and password required" }), { status: 400 });
     }
 
-    // Check if admin exists in database
-    const admin = await Admin.findOne({ email });
+    // Then validate the format
+    if (!await validateString(email, { max: 200 }) || !await validateString(password, { max: 200 })) {
+      return new Response(JSON.stringify({ error: "Invalid input. Please check email and password." }), { status: 400 });
+    }
+
+    // Case-insensitive email lookup using regex (escape special regex chars)
+    const emailLower = email.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    
+    // MongoDB $regex expects a string pattern, not a RegExp object
+    const admin = await Admin.findOne({ 
+      email: { $regex: `^${emailLower}$`, $options: "i" } 
+    });
 
     if (!admin) {
       return new Response(JSON.stringify({ 
