@@ -6,6 +6,7 @@ import HeaderBackground from "./components/HeaderBackground";
 import Author from "./components/Author";
 import BookSection from "./components/BookSection";
 import Footer from "./components/Footer";
+import { setCookie, getCookie } from "./utils/cookies";
 
 export default function Home() {
   useEffect(() => {
@@ -18,16 +19,14 @@ export default function Home() {
       
       if (affiliateCode) {
         try {
-          // Check if we've already tracked this click in this session
-          const tracked = sessionStorage.getItem(`affiliateTracked_${affiliateCode}`);
-          if (tracked) {
-            // Already tracked, skip but still store for order tracking
-            sessionStorage.setItem("affiliateCode", affiliateCode);
+          // Check if we already have a valid clickId for this affiliate code
+          const existingClickId = getCookie("affiliateClickId");
+          const existingAffiliateCode = getCookie("affiliateCode");
+          
+          // If same affiliate code and clickId exists, don't track again
+          if (existingClickId && existingAffiliateCode === affiliateCode) {
             return;
           }
-          
-          // Store affiliate code in sessionStorage for order tracking
-          sessionStorage.setItem("affiliateCode", affiliateCode);
           
           // Track the click
           const response = await fetch("/api/affiliate/track-click", {
@@ -38,9 +37,11 @@ export default function Home() {
           
           if (response.ok) {
             const data = await response.json();
-            if (data.success) {
-              // Mark as tracked to prevent duplicates
-              sessionStorage.setItem(`affiliateTracked_${affiliateCode}`, "true");
+            if (data.success && data.clickId) {
+              // Store clickId and affiliateCode in cookies (30 days expiry)
+              setCookie("affiliateClickId", data.clickId, 30);
+              setCookie("affiliateCode", affiliateCode, 30);
+              setCookie("affiliateClickTime", new Date().toISOString(), 30);
             }
           } else {
             const errorData = await response.json().catch(() => ({}));

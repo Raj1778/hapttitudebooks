@@ -6,6 +6,7 @@ import Image from "next/image";
 import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
 import BackButton from "../components/BackButton";
+import { getCookie } from "../utils/cookies";
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -150,11 +151,16 @@ export default function PaymentPage() {
                 razorpayPaymentId: response.razorpay_payment_id,
                 razorpaySignature: response.razorpay_signature,
               };
-              // Attach affiliate code if present
+              // Attach affiliate tracking data from cookies
               if (typeof window !== "undefined") {
-                const affiliateCode = sessionStorage.getItem("affiliateCode");
+                const affiliateCode = getCookie("affiliateCode");
+                const clickId = getCookie("affiliateClickId");
+                
                 if (affiliateCode) {
                   order.affiliateCode = affiliateCode;
+                }
+                if (clickId) {
+                  order.clickId = clickId;
                 }
               }
 
