@@ -51,13 +51,40 @@ const defaultOrigins = [
 ];
 
 export async function isAllowedOrigin(origin) {
-  if (!origin) return true; // same-origin requests may not send Origin
-  const allowed = process.env.NEXT_PUBLIC_SITE_URL
-    ? [process.env.NEXT_PUBLIC_SITE_URL, ...defaultOrigins]
-    : defaultOrigins;
+  // Same-origin requests may not send Origin header - allow them
+  if (!origin) return true;
+  
+  // Get allowed origins
+  const allowed = [];
+  
+  // Add NEXT_PUBLIC_SITE_URL if set
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    allowed.push(process.env.NEXT_PUBLIC_SITE_URL);
+  }
+  
+  // Add Vercel deployment URL if available
+  if (process.env.VERCEL_URL) {
+    allowed.push(`https://${process.env.VERCEL_URL}`);
+  }
+  
+  // Add default localhost origins
+  allowed.push(...defaultOrigins);
+  
   try {
     const o = new URL(origin);
-    return allowed.includes(o.origin);
+    const originUrl = o.origin;
+    
+    // Check exact match
+    if (allowed.includes(originUrl)) {
+      return true;
+    }
+    
+    // Also allow if it's a Vercel preview/deployment URL
+    if (originUrl.includes('.vercel.app')) {
+      return true;
+    }
+    
+    return false;
   } catch {
     return false;
   }

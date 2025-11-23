@@ -10,11 +10,21 @@ export const revalidate = 0;
 export async function POST(req) {
   try {
     const origin = req.headers.get("origin");
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || 
+               req.headers.get("x-real-ip") || 
+               "unknown";
     
     const isAllowed = await isAllowedOrigin(origin);
     if (!isAllowed) {
-      return new Response(JSON.stringify({ error: "Origin not allowed" }), { status: 403 });
+      console.error("Origin not allowed:", origin, "Allowed:", process.env.NEXT_PUBLIC_SITE_URL, process.env.VERCEL_URL);
+      return new Response(
+        JSON.stringify({ 
+          error: "Origin not allowed",
+          origin,
+          allowed: process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
+        }), 
+        { status: 403 }
+      );
     }
     
     const checkRate = await rateLimit({ windowMs: 60_000, max: 60 });
@@ -24,7 +34,14 @@ export async function POST(req) {
     }
 
     await dbConnect();
-    const rawBody = await req.json();
+    
+    let rawBody;
+    try {
+      rawBody = await req.json();
+    } catch (e) {
+      return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400 });
+    }
+    
     const body = await sanitizeObject(rawBody);
     const { affiliateCode } = body || {};
 
@@ -38,17 +55,34 @@ export async function POST(req) {
     }
 
     // Optimize: Use aggregation instead of fetching all clicks
-    const stats = await AffiliateClick.aggregate([
-      { $match: { affiliateCode } },
-      {
-        $group: {
-          _id: null,
-          totalClicks: { $sum: 1 },
-          totalConversions: { $sum: { $cond: ["$converted", 1, 0] } },
-          totalCommission: { $sum: "$commission" }
+    let stats;
+    try {
+      stats = await AffiliateClick.aggregate([
+        { $match: { affiliateCode } },
+        {
+          $group: {
+            _id: null,
+            totalClicks: { $sum: 1 },
+            totalConversions: { $sum: { $cond: ["$converted", 1, 0] } },
+            totalCommission: { $sum: "$commission" }
+          }
         }
-      }
-    ]);
+      ]);
+    } catch (aggError) {
+      console.error("Aggregation error:", aggError);
+      // Fallback to basic counts if aggregation fails
+      const clickCount = await AffiliateClick.countDocuments({ affiliateCode });
+      const conversionCount = await AffiliateClick.countDocuments({ affiliateCode, converted: true });
+      const commissionResult = await AffiliateClick.aggregate([
+        { $match: { affiliateCode, converted: true } },
+        { $group: { _id: null, totalCommission: { $sum: "$commission" } } }
+      ]);
+      stats = [{
+        totalClicks: clickCount,
+        totalConversions: conversionCount,
+        totalCommission: commissionResult[0]?.totalCommission || 0
+      }];
+    }
 
     const result = stats[0] || { totalClicks: 0, totalConversions: 0, totalCommission: 0 };
     const conversionRate = result.totalClicks > 0 
@@ -79,7 +113,14 @@ export async function POST(req) {
     );
   } catch (error) {
     console.error("Error fetching affiliate stats:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch affiliate stats" }), { status: 500 });
+    return new Response(
+      JSON.stringify({ 
+        error: "Failed to fetch affiliate stats",
+        details: process.env.NODE_ENV === "development" ? error.message : undefined,
+        stack: process.env.NODE_ENV === "development" ? error.stack : undefined
+      }), 
+      { status: 500 }
+    );
   }
 }
 

@@ -50,11 +50,13 @@ export default function AffiliateDashboard() {
       if (res.ok && data.success) {
         setStats(data.stats);
       } else {
-        toast.error("Failed to fetch stats");
+        const errorMsg = data.error || "Failed to fetch stats";
+        console.error("Stats fetch error:", errorMsg, data);
+        toast.error(errorMsg);
       }
     } catch (err) {
       console.error("Error fetching stats:", err);
-      toast.error("Failed to fetch stats");
+      toast.error("Failed to fetch stats: " + (err.message || "Network error"));
     } finally {
       setLoading(false);
     }
