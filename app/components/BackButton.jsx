@@ -23,7 +23,7 @@ export default function BackButton({
     <button
       type="button"
       onClick={handleBack}
-      className={`flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 ${className}`}
+      className={`flex items-center gap-2 text-[#2f5d44] hover:text-[#5e2a00] transition-colors cursor-pointer active:scale-95 ${className}`}
     >
       <ArrowLeft className="w-4 h-4" />
       <span>{label}</span>

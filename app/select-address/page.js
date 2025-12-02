@@ -225,14 +225,14 @@ export default function SelectAddressPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center">
-        <p className="text-[#1f3b2c]">Loading addresses...</p>
+      <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex items-center justify-center">
+        <p className="text-[#dc602e]">Loading addresses...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
       
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-4xl mb-4">
@@ -240,7 +240,7 @@ export default function SelectAddressPage() {
       </div>
 
       {/* ===== Title ===== */}
-      <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1f3b2c] mb-8">
+      <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#dc602e] mb-8">
         Select Delivery Address
       </h1>
 
@@ -259,12 +259,12 @@ export default function SelectAddressPage() {
                   onClick={() => setSelectedAddressId(addressId)}
                   className={`cursor-pointer flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-5 rounded-2xl border transition-all duration-300 ${
                     isSelected
-                      ? "border-transparent bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] shadow-lg"
+                      ? "border-transparent bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] shadow-lg"
                       : "border-[#d5e9dc] bg-white hover:shadow-md"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={isSelected ? "text-[#f5fff8]" : "text-[#244d38]"}>
+                    <div className={isSelected ? "text-[#f5fff8]" : "text-[#5e2a00]"}>
                       {getAddressIcon(address.type)}
                     </div>
                     <div>
@@ -293,14 +293,14 @@ export default function SelectAddressPage() {
         {!showNew ? (
           <button
             onClick={() => setShowNew(true)}
-            className="cursor-pointer flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] mt-8 font-medium transition-all active:scale-95"
+            className="cursor-pointer flex items-center gap-2 text-[#2f5d44] hover:text-[#5e2a00] mt-8 font-medium transition-all active:scale-95"
           >
             <PlusCircle className="w-5 h-5" /> Add New Address
           </button>
         ) : (
           <div className="mt-8 bg-[#f9fdfb] border border-[#d5e9dc] rounded-2xl p-6 space-y-4">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-[#1f3b2c]">Add New Address</h3>
+              <h3 className="text-lg font-semibold text-[#dc602e]">Add New Address</h3>
               <button
                 onClick={() => {
                   setShowNew(false);
@@ -316,18 +316,18 @@ export default function SelectAddressPage() {
                     state: "",
                   });
                 }}
-                className="text-[#3b4a3f] hover:text-[#244d38] cursor-pointer active:scale-95 transition-transform"
+                className="text-[#3b4a3f] hover:text-[#5e2a00] cursor-pointer active:scale-95 transition-transform"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Address Type</label>
+                <label className="block text-sm font-medium text-[#dc602e] mb-1">Address Type</label>
                 <select
                   value={newAddress.type}
                   onChange={(e) => setNewAddress({ ...newAddress, type: e.target.value })}
-                  className="w-full p-2.5 border border-[#c6cfc9] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+                  className="w-full p-2.5 border border-[#c6cfc9] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
                 >
                   <option value="home">Home</option>
                   <option value="office">Office</option>
@@ -335,7 +335,7 @@ export default function SelectAddressPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+                <label className="block text-sm font-medium text-[#dc602e] mb-1">
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -343,7 +343,7 @@ export default function SelectAddressPage() {
                   placeholder="Full Name"
                   value={newAddress.fullName}
                   onChange={(e) => setNewAddress({ ...newAddress, fullName: e.target.value })}
-                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c] ${
+                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00] ${
                     formErrors.fullName ? "border-red-500" : "border-[#c6cfc9]"
                   }`}
                 />
@@ -352,7 +352,7 @@ export default function SelectAddressPage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+                <label className="block text-sm font-medium text-[#dc602e] mb-1">
                   Phone Number <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -360,7 +360,7 @@ export default function SelectAddressPage() {
                   placeholder="10-digit Indian phone number"
                   value={newAddress.phoneNumber}
                   onChange={(e) => setNewAddress({ ...newAddress, phoneNumber: e.target.value })}
-                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c] ${
+                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00] ${
                     formErrors.phoneNumber ? "border-red-500" : "border-[#c6cfc9]"
                   }`}
                   required
@@ -372,7 +372,7 @@ export default function SelectAddressPage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+                <label className="block text-sm font-medium text-[#dc602e] mb-1">
                   House / Flat No. <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -380,7 +380,7 @@ export default function SelectAddressPage() {
                   placeholder="House / Flat No."
                   value={newAddress.houseFlatNo}
                   onChange={(e) => setNewAddress({ ...newAddress, houseFlatNo: e.target.value })}
-                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c] ${
+                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00] ${
                     formErrors.houseFlatNo ? "border-red-500" : "border-[#c6cfc9]"
                   }`}
                 />
@@ -389,7 +389,7 @@ export default function SelectAddressPage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+                <label className="block text-sm font-medium text-[#dc602e] mb-1">
                   Area / Locality <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -397,7 +397,7 @@ export default function SelectAddressPage() {
                   placeholder="Area / Locality"
                   value={newAddress.areaLocality}
                   onChange={(e) => setNewAddress({ ...newAddress, areaLocality: e.target.value })}
-                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c] ${
+                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00] ${
                     formErrors.areaLocality ? "border-red-500" : "border-[#c6cfc9]"
                   }`}
                 />
@@ -406,7 +406,7 @@ export default function SelectAddressPage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+                <label className="block text-sm font-medium text-[#dc602e] mb-1">
                   City <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -414,7 +414,7 @@ export default function SelectAddressPage() {
                   placeholder="City"
                   value={newAddress.city}
                   onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c] ${
+                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00] ${
                     formErrors.city ? "border-red-500" : "border-[#c6cfc9]"
                   }`}
                 />
@@ -423,7 +423,7 @@ export default function SelectAddressPage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+                <label className="block text-sm font-medium text-[#dc602e] mb-1">
                   Pincode <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -431,7 +431,7 @@ export default function SelectAddressPage() {
                   placeholder="Pincode"
                   value={newAddress.pincode}
                   onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })}
-                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c] ${
+                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00] ${
                     formErrors.pincode ? "border-red-500" : "border-[#c6cfc9]"
                   }`}
                 />
@@ -440,20 +440,22 @@ export default function SelectAddressPage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1f3b2c] mb-1">State</label>
+                <label className="block text-sm font-medium text-[#dc602e] mb-1">State</label>
                 <input
                   type="text"
                   placeholder="State (Optional)"
                   value={newAddress.state}
                   onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
-                  className="w-full p-2.5 border border-[#c6cfc9] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+                  className="w-full p-2.5 border border-[#c6cfc9] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
                 />
               </div>
             </div>
             <button
               onClick={handleSaveAddress}
               disabled={saving}
-              className="cursor-pointer mt-2 py-2.5 px-6 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+              className="cursor-pointer mt-2 py-2.5 px-6 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
             >
               {saving ? "Saving..." : "Save Address"}
             </button>
@@ -466,7 +468,9 @@ export default function SelectAddressPage() {
             <button
               onClick={handleContinue}
               disabled={isContinuing}
-              className="cursor-pointer px-8 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="cursor-pointer px-8 py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-300 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isContinuing ? "Continuing..." : "Continue to Payment"}
             </button>

@@ -37,7 +37,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-6 text-sm md:text-base font-medium relative">
         <Link
           href="/cart"
-          className="hover:text-green-300 transition-colors"
+          className="hover:text-orange-600 transition-colors"
           aria-label="Cart"
         >
           <ShoppingCart size={32} />
@@ -47,7 +47,7 @@ const Navbar = () => {
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="hover:text-green-300 transition-colors"
+            className="hover:text-orange-600 transition-colors"
             aria-label="Profile"
           >
             <User size={32} />

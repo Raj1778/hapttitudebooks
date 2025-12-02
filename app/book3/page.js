@@ -8,7 +8,7 @@ export default function BookPage() {
       
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-6xl mb-4 absolute top-4 left-6 md:left-20">
-        <Link href="/" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
+        <Link href="/" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#5e2a00] transition-colors cursor-pointer active:scale-95 inline-block">
           <ArrowLeft className="w-4 h-4" />
           Back to Home
         </Link>

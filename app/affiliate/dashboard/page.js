@@ -89,12 +89,12 @@ export default function AffiliateDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] px-4 sm:px-6 lg:px-20 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] px-4 sm:px-6 lg:px-20 py-10">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1f3b2c]">
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#dc602e]">
               Affiliate Dashboard
             </h1>
             <p className="text-[#3b4a3f] mt-2">Welcome, {affiliateName}</p>
@@ -110,17 +110,19 @@ export default function AffiliateDashboard() {
 
         {/* Affiliate Link Section */}
         <div className="bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60 mb-8">
-          <h2 className="text-xl font-semibold text-[#1f3b2c] mb-4">Your Affiliate Link</h2>
+          <h2 className="text-xl font-semibold text-[#dc602e] mb-4">Your Affiliate Link</h2>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={`${typeof window !== "undefined" ? window.location.origin : ""}/?ref=${affiliateCode}`}
               readOnly
-              className="flex-1 p-3 border border-[#d5e9dc] rounded-lg bg-white text-[#1f3b2c] font-mono text-sm"
+              className="flex-1 p-3 border border-[#d5e9dc] rounded-lg bg-white text-[#dc602e] font-mono text-sm"
             />
             <button
               onClick={copyAffiliateLink}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-white rounded-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all cursor-pointer active:scale-95"
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-white rounded-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all cursor-pointer active:scale-95"
             >
               {copied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               {copied ? "Copied!" : "Copy Link"}
@@ -141,9 +143,9 @@ export default function AffiliateDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[#3b4a3f] text-sm">Total Clicks</p>
-                    <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{stats.totalClicks}</p>
+                    <p className="text-2xl font-bold text-[#dc602e] mt-2">{stats.totalClicks}</p>
                   </div>
-                  <MousePointerClick className="w-10 h-10 text-[#2f6d4c]" />
+                  <MousePointerClick className="w-10 h-10 text-[#ff7b00]" />
                 </div>
               </div>
 
@@ -151,9 +153,9 @@ export default function AffiliateDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[#3b4a3f] text-sm">Conversions</p>
-                    <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{stats.totalConversions}</p>
+                    <p className="text-2xl font-bold text-[#dc602e] mt-2">{stats.totalConversions}</p>
                   </div>
-                  <TrendingUp className="w-10 h-10 text-[#2f6d4c]" />
+                  <TrendingUp className="w-10 h-10 text-[#ff7b00]" />
                 </div>
               </div>
 
@@ -161,9 +163,9 @@ export default function AffiliateDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[#3b4a3f] text-sm">Conversion Rate</p>
-                    <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{stats.conversionRate}%</p>
+                    <p className="text-2xl font-bold text-[#dc602e] mt-2">{stats.conversionRate}%</p>
                   </div>
-                  <BarChart3 className="w-10 h-10 text-[#2f6d4c]" />
+                  <BarChart3 className="w-10 h-10 text-[#ff7b00]" />
                 </div>
               </div>
 
@@ -171,16 +173,16 @@ export default function AffiliateDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[#3b4a3f] text-sm">Total Commission</p>
-                    <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{formatCurrency(stats.totalCommission)}</p>
+                    <p className="text-2xl font-bold text-[#dc602e] mt-2">{formatCurrency(stats.totalCommission)}</p>
                   </div>
-                  <DollarSign className="w-10 h-10 text-[#2f6d4c]" />
+                  <DollarSign className="w-10 h-10 text-[#ff7b00]" />
                 </div>
               </div>
             </div>
 
             {/* Additional Info */}
             <div className="bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60">
-              <h3 className="text-lg font-semibold text-[#1f3b2c] mb-4">Commission Details</h3>
+              <h3 className="text-lg font-semibold text-[#dc602e] mb-4">Commission Details</h3>
               <div className="space-y-2 text-sm text-[#3b4a3f]">
                 <p><strong>Commission Rate:</strong> {stats.commissionRate}%</p>
                 <p><strong>Affiliate Code:</strong> <span className="font-mono font-semibold">{stats.affiliateCode}</span></p>

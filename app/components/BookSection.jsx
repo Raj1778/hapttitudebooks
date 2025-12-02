@@ -3,7 +3,7 @@ import BookCard from "./BookCard";
 
 const BookSection = () => {
   return (
-    <div id="explore" className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-green-600 to-blue-700 py-16 px-6 relative overflow-hidden">
+    <div id="explore" className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-[#fe8c00] to-[#f83600] py-16 px-6 relative overflow-hidden">
       
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-10">
@@ -21,7 +21,7 @@ const BookSection = () => {
           <p className="text-white/90 text-base sm:text-lg font-medium">
             Discover our handpicked collection of bestsellers
           </p>
-          <div className="h-1 w-24 bg-green-600/80 mx-auto rounded-full mt-4"></div>
+          <div className="h-1 w-24 bg-red-600 mx-auto rounded-full mt-4"></div>
         </div>
 
         {/* Book Cards */}

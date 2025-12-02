@@ -227,7 +227,7 @@ export default function PaymentPage() {
             contact: phone,
           },
           theme: {
-            color: "#2f6d4c",
+            color: "#fc4a1a",
           },
         };
 
@@ -274,12 +274,12 @@ export default function PaymentPage() {
 
   if (!userEmail) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[#1f3b2c] mb-4">Please verify your email first</p>
+          <p className="text-[#dc602e] mb-4">Please verify your email first</p>
           <button
             onClick={() => router.push("/hapttitude-wave1")}
-            className="px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform"
+            className="px-6 py-2 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform"
           >
             Go to Book Page
           </button>
@@ -290,12 +290,12 @@ export default function PaymentPage() {
 
   if (!selectedAddress) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[#1f3b2c] mb-4">Please select a delivery address</p>
+          <p className="text-[#dc602e] mb-4">Please select a delivery address</p>
           <button
             onClick={() => router.push("/select-address")}
-            className="px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform"
+            className="px-6 py-2 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform"
           >
             Select Address
           </button>
@@ -305,7 +305,7 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] px-4 sm:px-6 lg:px-20 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] px-4 sm:px-6 lg:px-20 py-10">
       <div className="max-w-5xl mx-auto">
         {/* Back Button */}
         <div className="mb-4">
@@ -313,7 +313,7 @@ export default function PaymentPage() {
         </div>
 
         {/* Header */}
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1f3b2c] mb-8">
+        <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#dc602e] mb-8">
           Payment
         </h1>
 
@@ -323,9 +323,9 @@ export default function PaymentPage() {
             {/* Delivery Address */}
             <div className="bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60">
               <div className="flex items-start gap-3 mb-4">
-                <MapPin className="w-5 h-5 text-[#2f6d4c] mt-1" />
+                <MapPin className="w-5 h-5 text-[#ff7b00] mt-1" />
                 <div className="flex-1">
-                  <h2 className="text-lg font-semibold text-[#1f3b2c] mb-2">Delivering to</h2>
+                  <h2 className="text-lg font-semibold text-[#dc602e] mb-2">Delivering to</h2>
                   <p className="text-sm text-[#3b4a3f] font-medium">
                     {selectedAddress?.fullName || "N/A"}
                   </p>
@@ -338,7 +338,7 @@ export default function PaymentPage() {
                 </div>
                 <button
                   onClick={() => router.push("/select-address")}
-                  className="text-sm text-[#2f5d44] hover:text-[#244d38] font-medium cursor-pointer active:scale-95 transition-transform"
+                  className="text-sm text-[#2f5d44] hover:text-[#5e2a00] font-medium cursor-pointer active:scale-95 transition-transform"
                 >
                   Change
                 </button>
@@ -347,7 +347,7 @@ export default function PaymentPage() {
 
             {/* Order Items */}
             <div className="bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60">
-              <h2 className="text-lg font-semibold text-[#1f3b2c] mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-[#dc602e] mb-4 flex items-center gap-2">
                 <Package className="w-5 h-5" />
                 Order Summary
               </h2>
@@ -366,10 +366,10 @@ export default function PaymentPage() {
                         className="rounded-lg shadow-sm"
                       />
                       <div className="flex-1">
-                        <h3 className="font-medium text-[#1f3b2c]">{product.name}</h3>
+                        <h3 className="font-medium text-[#dc602e]">{product.name}</h3>
                         <p className="text-sm text-[#3b4a3f]">Qty: {item.quantity}</p>
                       </div>
-                      <p className="font-semibold text-[#1f3b2c]">
+                      <p className="font-semibold text-[#dc602e]">
                         ₹{product.price * item.quantity}
                       </p>
                     </div>
@@ -383,7 +383,7 @@ export default function PaymentPage() {
           {/* Right Column - Price Summary */}
           <div className="lg:col-span-1">
             <div className="bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60 sticky top-4">
-              <h2 className="text-lg font-semibold text-[#1f3b2c] mb-4">Price Details</h2>
+              <h2 className="text-lg font-semibold text-[#dc602e] mb-4">Price Details</h2>
               
               <div className="space-y-3 mb-4">
                 <div className="flex justify-between text-[#3b4a3f]">
@@ -394,7 +394,7 @@ export default function PaymentPage() {
                   <span>Shipping</span>
                   <span>₹{shipping}</span>
                 </div>
-                <div className="border-t border-[#d5e9dc] pt-3 flex justify-between text-[#1f3b2c] font-semibold text-lg">
+                <div className="border-t border-[#d5e9dc] pt-3 flex justify-between text-[#dc602e] font-semibold text-lg">
                   <span>Total</span>
                   <span>₹{total}</span>
                 </div>
@@ -403,7 +403,7 @@ export default function PaymentPage() {
               <button
                 onClick={handlePayment}
                 disabled={loading || cartItems.length === 0}
-                className="w-full mt-6 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] font-semibold rounded-xl shadow-md hover:from-[#1f3f2e] hover:to-[#2b5c44] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                className="w-full mt-6 py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] font-semibold rounded-xl shadow-md hover:from-[#f12711] hover:to-[#f5af19] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
                 <Lock className="w-4 h-4" />
                 {loading ? "Processing..." : `Pay ₹${total} Securely`}

@@ -93,19 +93,19 @@ export default function MyOrdersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center">
-        <p className="text-[#1f3b2c]">Loading...</p>
+      <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex items-center justify-center">
+        <p className="text-[#dc602e]">Loading...</p>
       </div>
     );
   }
 
   if (!userEmail) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[#1f3b2c] mb-4">Please verify your email first</p>
+          <p className="text-[#dc602e] mb-4">Please verify your email first</p>
           <Link href="/hapttitude-wave1">
-            <button className="px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
+            <button className="px-6 py-2 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
               Go to Book Page
             </button>
           </Link>
@@ -115,7 +115,7 @@ export default function MyOrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
       
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-4xl mb-4">
@@ -123,7 +123,7 @@ export default function MyOrdersPage() {
       </div>
 
       {/* ===== Title ===== */}
-      <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1f3b2c] mb-8">
+      <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#dc602e] mb-8">
         My Orders
       </h1>
 
@@ -131,10 +131,10 @@ export default function MyOrdersPage() {
       {orders.length === 0 ? (
         <div className="w-full max-w-4xl bg-[#f8fdf9] rounded-3xl shadow-md p-8 border border-[#d5e9dc]/60 text-center">
           <Package className="w-16 h-16 text-[#3b4a3f] mx-auto mb-4 opacity-50" />
-          <h2 className="text-xl font-semibold text-[#1f3b2c] mb-2">No orders yet</h2>
+          <h2 className="text-xl font-semibold text-[#dc602e] mb-2">No orders yet</h2>
           <p className="text-[#3b4a3f] mb-6">Start shopping to see your orders here</p>
           <Link href="/hapttitude-wave1">
-            <button className="px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
+            <button className="px-6 py-2 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
               Start Shopping
             </button>
           </Link>
@@ -145,7 +145,7 @@ export default function MyOrdersPage() {
             <div key={index} className="bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60">
               <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-[#1f3b2c] mb-2">
+                  <h3 className="text-lg font-semibold text-[#dc602e] mb-2">
                     Order #{order.orderId || `ORD-${Date.now()}-${index}`}
                   </h3>
                   <div className="flex items-center gap-2 text-sm text-[#3b4a3f] mb-1">
@@ -171,10 +171,10 @@ export default function MyOrdersPage() {
                   )}
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-semibold text-[#1f3b2c]">₹{order.total || 0}</p>
+                  <p className="text-lg font-semibold text-[#dc602e]">₹{order.total || 0}</p>
                   <span className={`text-sm px-3 py-1 rounded-full ${
                     order.status === "Delivered" 
-                      ? "bg-green-100 text-green-700"
+                      ? "bg-orange-100 text-orange-700"
                       : order.status === "Shipped"
                       ? "bg-blue-100 text-blue-700"
                       : "bg-yellow-100 text-yellow-700"
@@ -200,10 +200,10 @@ export default function MyOrdersPage() {
                           />
                         )}
                         <div className="flex-1">
-                          <h4 className="font-medium text-[#1f3b2c]">{item.name}</h4>
+                          <h4 className="font-medium text-[#dc602e]">{item.name}</h4>
                           <p className="text-sm text-[#3b4a3f]">Qty: {item.quantity} × ₹{item.price}</p>
                         </div>
-                        <p className="font-semibold text-[#1f3b2c]">₹{item.price * item.quantity}</p>
+                        <p className="font-semibold text-[#dc602e]">₹{item.price * item.quantity}</p>
                       </div>
                     ))}
                   </div>
@@ -224,7 +224,9 @@ export default function MyOrdersPage() {
                 </div>
                 <button
                   onClick={() => router.push(`/receipt/${order.orderId}`)}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-medium hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all cursor-pointer active:scale-95"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-medium hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all cursor-pointer active:scale-95"
                 >
                   <Receipt className="w-4 h-4" />
                   View Receipt

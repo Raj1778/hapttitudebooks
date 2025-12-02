@@ -5,17 +5,17 @@ const Header = () => {
   return (
     <main className="flex-grow flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-20">
       <h1 className="text-4xl sm:text-6xl font-bold mb-6 text-white">
-        Welcome to <span className="text-green-900">Hapttitude</span>
+        Welcome to <span className="text-orange-600">Hapttitude</span>
       </h1>
 
-      <p className="text-lg sm:text-xl font-medium text-[#2C3E50] leading-relaxed max-w-2xl">
+      <p className="text-lg sm:text-xl font-medium text-[#fff6e6] leading-relaxed max-w-2xl">
         Empower your mind, embrace your emotions, and build your inner peace.
       </p>
 
       <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
         <a
           href="#explore"
-          className="px-8 py-3 bg-gradient-to-r from-[#2C9A73] to-[#0E7C6B] hover:from-[#0E7C6B] hover:to-[#2C9A73] rounded-full font-semibold text-white transition-all duration-200 cursor-pointer active:scale-95 transform"
+          className="px-8 py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] hover:from-[#f83600] hover:to-[#fe8c00] rounded-full font-semibold text-white transition-all duration-200 cursor-pointer active:scale-95 transform"
           onClick={(e) => {
             e.preventDefault();
             const element = document.getElementById('explore');
@@ -29,7 +29,7 @@ const Header = () => {
 
         <Link
           href="/about-us"
-          className="px-8 py-3 bg-white border border-[#0E7C6B]/40 rounded-full font-semibold text-[#0E7C6B] hover:bg-[#0E7C6B] hover:text-white transition-all duration-200 active:scale-95 transform"
+          className="px-8 py-3 bg-white border border-[#fe8c00]/40 rounded-full font-semibold text-[#f83600] hover:bg-[#f83600] hover:text-white transition-all duration-200 active:scale-95 transform"
         >
           About Us
         </Link>

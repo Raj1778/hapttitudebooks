@@ -10,13 +10,13 @@ export default function LoginPage() {
   const [selectedType, setSelectedType] = useState(null); // "admin" or "affiliate"
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center px-4 sm:px-6 lg:px-20 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex items-center justify-center px-4 sm:px-6 lg:px-20 py-10">
       <div className="w-full max-w-md bg-[#f8fdf9] rounded-3xl shadow-lg p-8 border border-[#d5e9dc]/60">
         {!selectedType ? (
           <>
             {/* Selection Screen */}
             <div className="text-center mb-8">
-              <h1 className="text-2xl md:text-3xl font-serif font-bold text-[#1f3b2c] mb-2">
+              <h1 className="text-2xl md:text-3xl font-serif font-bold text-[#dc602e] mb-2">
                 Login
               </h1>
               <p className="text-[#3b4a3f] text-sm">Choose your login type</p>
@@ -25,7 +25,9 @@ export default function LoginPage() {
             <div className="space-y-4">
               <button
                 onClick={() => setSelectedType("admin")}
-                className="w-full p-6 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-white rounded-xl hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 flex items-center justify-center gap-4 cursor-pointer active:scale-95"
+                className="w-full p-6 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-white rounded-xl hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-300 flex items-center justify-center gap-4 cursor-pointer active:scale-95"
               >
                 <Shield className="w-6 h-6" />
                 <div className="text-left">
@@ -36,7 +38,7 @@ export default function LoginPage() {
 
               <button
                 onClick={() => setSelectedType("affiliate")}
-                className="w-full p-6 bg-gradient-to-r from-[#2f6d4c] to-[#244d38] text-white rounded-xl hover:from-[#2b5d44] hover:to-[#1d3f2f] transition-all duration-300 flex items-center justify-center gap-4 cursor-pointer active:scale-95"
+                className="w-full p-6 text-white bg-gradient-to-r from-[#fe8c00] to-[#f83600] rounded-xl hover:from-[#ff5f1f] hover:to-[#ffcc33] transition-all duration-300 flex items-center justify-center gap-4 cursor-pointer active:scale-95"
               >
                 <BarChart3 className="w-6 h-6" />
                 <div className="text-left">
@@ -47,7 +49,7 @@ export default function LoginPage() {
             </div>
 
             <div className="mt-6 text-center">
-              <Link href="/" className="text-sm text-[#2f5d44] hover:text-[#244d38] transition-colors flex items-center justify-center gap-2">
+              <Link href="/" className="text-sm text-[#2f5d44] hover:text-[#5e2a00] transition-colors flex items-center justify-center gap-2">
                 <ArrowLeft className="w-4 h-4" />
                 Back to Home
               </Link>
@@ -159,10 +161,10 @@ function AdminLoginForm({ onBack }) {
   return (
     <>
       <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] rounded-full mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#fe8c00] to-[#f83600] rounded-full mb-4">
           <Shield className="w-8 h-8 text-white" />
         </div>
-        <h2 className="text-2xl font-serif font-bold text-[#1f3b2c] mb-2">
+        <h2 className="text-2xl font-serif font-bold text-[#dc602e] mb-2">
           Admin Login
         </h2>
         <p className="text-[#3b4a3f] text-sm">Enter your credentials to access admin panel</p>
@@ -171,31 +173,33 @@ function AdminLoginForm({ onBack }) {
       {!isCreating ? (
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Email Address</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Email Address</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="admin@example.com"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Password</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="Enter your password"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-white rounded-full font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-white rounded-full font-semibold hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
           >
             <LogIn className="w-4 h-4" />
             {loading ? "Logging in..." : "Login"}
@@ -208,7 +212,7 @@ function AdminLoginForm({ onBack }) {
                 setEmail("");
                 setPassword("");
               }}
-              className="text-sm text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95"
+              className="text-sm text-[#2f5d44] hover:text-[#5e2a00] transition-colors cursor-pointer active:scale-95"
             >
               Create Admin Account
             </button>
@@ -217,34 +221,34 @@ function AdminLoginForm({ onBack }) {
       ) : (
         <form onSubmit={handleCreateAdmin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Name (Optional)</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Name (Optional)</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="Admin Name"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Email Address</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Email Address</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="admin@example.com"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Password</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="Enter a password"
             />
             <p className="text-xs text-[#3b4a3f] mt-1">
@@ -252,7 +256,7 @@ function AdminLoginForm({ onBack }) {
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">
               Admin Passkey <span className="text-red-500">*</span>
             </label>
             <input
@@ -260,7 +264,7 @@ function AdminLoginForm({ onBack }) {
               value={passkey}
               onChange={(e) => setPasskey(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="Enter admin passkey"
             />
             <p className="text-xs text-[#3b4a3f] mt-1">Required to create admin accounts</p>
@@ -268,7 +272,9 @@ function AdminLoginForm({ onBack }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-white rounded-full font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-white rounded-full font-semibold hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
           >
             {loading ? "Creating..." : "Create Admin Account"}
           </button>
@@ -281,7 +287,7 @@ function AdminLoginForm({ onBack }) {
                 setPassword("");
                 setPasskey("");
               }}
-              className="text-sm text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95"
+              className="text-sm text-[#2f5d44] hover:text-[#5e2a00] transition-colors cursor-pointer active:scale-95"
             >
               ← Back to Login
             </button>
@@ -292,7 +298,7 @@ function AdminLoginForm({ onBack }) {
       <div className="mt-6 text-center">
         <button
           onClick={onBack}
-          className="text-sm text-[#2f5d44] hover:text-[#244d38] transition-colors flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          className="text-sm text-[#2f5d44] hover:text-[#5e2a00] transition-colors flex items-center justify-center gap-2 cursor-pointer active:scale-95"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Selection
@@ -400,10 +406,10 @@ function AffiliateLoginForm({ onBack }) {
   return (
     <>
       <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#2f6d4c] to-[#244d38] rounded-full mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16  rounded-full mb-4">
           <BarChart3 className="w-8 h-8 text-white" />
         </div>
-        <h2 className="text-2xl font-serif font-bold text-[#1f3b2c] mb-2">
+        <h2 className="text-2xl font-serif font-bold text-[#dc602e] mb-2">
           Affiliate Login
         </h2>
         <p className="text-[#3b4a3f] text-sm">Enter your credentials to access affiliate dashboard</p>
@@ -412,31 +418,33 @@ function AffiliateLoginForm({ onBack }) {
       {!isCreating ? (
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Email Address</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Email Address</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="affiliate@example.com"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Password</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="Enter your password"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-white rounded-full font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-white rounded-full font-semibold hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
           >
             <LogIn className="w-4 h-4" />
             {loading ? "Logging in..." : "Login"}
@@ -449,7 +457,7 @@ function AffiliateLoginForm({ onBack }) {
                 setEmail("");
                 setPassword("");
               }}
-              className="text-sm text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95"
+              className="text-sm text-[#2f5d44] hover:text-[#5e2a00] transition-colors cursor-pointer active:scale-95"
             >
               Create Affiliate Account
             </button>
@@ -458,35 +466,35 @@ function AffiliateLoginForm({ onBack }) {
       ) : (
         <form onSubmit={handleCreateAccount} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Name</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="Your Name"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Email Address</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Email Address</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="affiliate@example.com"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">Password</label>
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="Enter a password"
             />
             <p className="text-xs text-[#3b4a3f] mt-1">
@@ -494,7 +502,7 @@ function AffiliateLoginForm({ onBack }) {
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+            <label className="block text-sm font-medium text-[#dc602e] mb-1">
               Affiliate Passkey <span className="text-red-500">*</span>
             </label>
             <input
@@ -502,7 +510,7 @@ function AffiliateLoginForm({ onBack }) {
               value={passkey}
               onChange={(e) => setPasskey(e.target.value)}
               required
-              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+              className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
               placeholder="Enter affiliate passkey"
             />
             <p className="text-xs text-[#3b4a3f] mt-1">Required to create affiliate accounts</p>
@@ -510,7 +518,9 @@ function AffiliateLoginForm({ onBack }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-white rounded-full font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-white rounded-full font-semibold hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
           >
             {loading ? "Creating..." : "Create Account"}
           </button>
@@ -524,7 +534,7 @@ function AffiliateLoginForm({ onBack }) {
                 setName("");
                 setPasskey("");
               }}
-              className="text-sm text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95"
+              className="text-sm text-[#2f5d44] hover:text-[#5e2a00] transition-colors cursor-pointer active:scale-95"
             >
               ← Back to Login
             </button>
@@ -535,7 +545,7 @@ function AffiliateLoginForm({ onBack }) {
       <div className="mt-6 text-center">
         <button
           onClick={onBack}
-          className="text-sm text-[#2f5d44] hover:text-[#244d38] transition-colors flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          className="text-sm text-[#2f5d44] hover:text-[#5e2a00] transition-colors flex items-center justify-center gap-2 cursor-pointer active:scale-95"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Selection

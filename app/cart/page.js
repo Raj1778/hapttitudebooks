@@ -194,11 +194,11 @@ export default function CartPage() {
 
   if (!userEmail) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[#1f3b2c] mb-4">Please verify your email first</p>
+          <p className="text-[#dc602e] mb-4">Please verify your email first</p>
               <Link href="/hapttitude-wave1">
-                <button className="px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
+                <button className="px-6 py-2 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
                   Go to Book Page
                 </button>
               </Link>
@@ -208,7 +208,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex flex-col items-center px-4 sm:px-6 lg:px-20 py-10">
       
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-6xl mb-4">
@@ -216,7 +216,7 @@ export default function CartPage() {
       </div>
 
       {/* ===== Title ===== */}
-      <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1f3b2c] mb-8">
+      <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#dc602e] mb-8">
         Your Cart
       </h1>
 
@@ -225,13 +225,13 @@ export default function CartPage() {
         
         {/* ===== Left: Cart Items ===== */}
         <div className="flex-1 bg-[#f8fdf9] rounded-3xl shadow-md p-6 sm:p-8 border border-[#d5e9dc]/60">
-          <h2 className="text-xl font-semibold text-[#1f3b2c] mb-4">Items</h2>
+          <h2 className="text-xl font-semibold text-[#dc602e] mb-4">Items</h2>
 
           {cartItems.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-[#3b4a3f]">Your cart is empty</p>
               <Link href="/hapttitude-wave1">
-                <button className="mt-4 px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
+                <button className="mt-4 px-6 py-2 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full cursor-pointer active:scale-95 transition-transform">
                   Continue Shopping
                 </button>
               </Link>
@@ -252,7 +252,7 @@ export default function CartPage() {
                       className="rounded-lg shadow-md"
                     />
                     <div>
-                      <h3 className="text-lg font-semibold text-[#1f3b2c]">
+                      <h3 className="text-lg font-semibold text-[#dc602e]">
                         {product.name}
                       </h3>
                       <p className="text-sm text-[#3b4a3f]">by {product.author}</p>
@@ -264,14 +264,14 @@ export default function CartPage() {
                   <div className="flex items-center gap-4">
                     <button 
                       onClick={() => updateQuantity(product._id, item.quantity - 1)}
-                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition active:scale-95 cursor-pointer"
+                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#5e2a00] rounded-full hover:bg-[#d3eadc] transition active:scale-95 cursor-pointer"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
-                    <span className="text-[#1f3b2c] font-medium w-8 text-center">{item.quantity}</span>
+                    <span className="text-[#dc602e] font-medium w-8 text-center">{item.quantity}</span>
                     <button 
                       onClick={() => updateQuantity(product._id, item.quantity + 1)}
-                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#244d38] rounded-full hover:bg-[#d3eadc] transition active:scale-95 cursor-pointer"
+                      className="w-8 h-8 flex items-center justify-center bg-[#e6f3eb] text-[#5e2a00] rounded-full hover:bg-[#d3eadc] transition active:scale-95 cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -279,7 +279,7 @@ export default function CartPage() {
 
                   {/* ===== Price & Remove ===== */}
                   <div className="flex flex-col items-center sm:items-end gap-2">
-                    <p className="text-lg font-semibold text-[#1f3b2c]">₹{product.price * item.quantity}</p>
+                    <p className="text-lg font-semibold text-[#dc602e]">₹{product.price * item.quantity}</p>
                     <button 
                       onClick={() => removeItem(product._id)}
                       className="text-sm text-[#527f66] hover:text-[#2f5d44] flex items-center gap-1 cursor-pointer active:scale-95 transition-transform"
@@ -295,7 +295,7 @@ export default function CartPage() {
 
         {/* ===== Right: Order Summary ===== */}
         <div className="lg:w-1/3 bg-[#f8fdf9] rounded-3xl shadow-md p-6 sm:p-8 border border-[#d5e9dc]/60 h-fit">
-          <h2 className="text-xl font-semibold text-[#1f3b2c] mb-4">Order Summary</h2>
+          <h2 className="text-xl font-semibold text-[#dc602e] mb-4">Order Summary</h2>
 
           <div className="flex justify-between text-[#3b4a3f] mb-2">
             <p>Subtotal</p>
@@ -305,13 +305,15 @@ export default function CartPage() {
             <p>Shipping</p>
             <p>₹{shipping}</p>
           </div>
-          <div className="flex justify-between text-[#1f3b2c] font-semibold text-lg border-t border-[#dbeee1] mt-4 pt-4">
+          <div className="flex justify-between text-[#dc602e] font-semibold text-lg border-t border-[#dbeee1] mt-4 pt-4">
             <p>Total</p>
             <p>₹{total}</p>
           </div>
           {cartItems.length > 0 && (
             <Link href="/select-address">
-              <button className="w-full mt-6 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 cursor-pointer active:scale-95">
+              <button className="w-full mt-6 py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-300 cursor-pointer active:scale-95">
                 Select address at next step
               </button>
             </Link>
@@ -322,7 +324,7 @@ export default function CartPage() {
       {/* ===== Users also bought Section ===== */}
       {userEmail && (
         <div className="w-full max-w-6xl mt-12">
-          <h2 className="text-2xl font-semibold text-[#1f3b2c] mb-6">Users also bought..</h2>
+          <h2 className="text-2xl font-semibold text-[#dc602e] mb-6">Users also bought..</h2>
           {otherBooks.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {otherBooks.map((book) => (
@@ -336,12 +338,14 @@ export default function CartPage() {
                       className="rounded-lg shadow-md"
                     />
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-[#1f3b2c]">{book.name}</h3>
+                      <h3 className="text-lg font-semibold text-[#dc602e]">{book.name}</h3>
                       <p className="text-sm text-[#3b4a3f]">by {book.author}</p>
-                      <p className="text-lg font-semibold text-[#1f3b2c] mt-2">₹{book.price}</p>
+                      <p className="text-lg font-semibold text-[#dc602e] mt-2">₹{book.price}</p>
                       <button
                         onClick={() => addToCart(book._id)}
-                        className="mt-4 px-6 py-2 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all cursor-pointer active:scale-95"
+                        className="mt-4 px-6 py-2 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all cursor-pointer active:scale-95"
                       >
                         Add to Cart
                       </button>

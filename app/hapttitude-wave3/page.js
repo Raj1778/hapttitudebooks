@@ -218,11 +218,11 @@ export default function BookPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center justify-start px-4 sm:px-6 lg:px-20 pt-4 sm:pt-6 pb-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex flex-col items-center justify-start px-4 sm:px-6 lg:px-20 pt-4 sm:pt-6 pb-8">
 
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-6xl mb-4 mt-4">
-        <Link href="/" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#244d38] transition-colors cursor-pointer active:scale-95 inline-block">
+        <Link href="/" className="flex items-center gap-2 text-[#2f5d44] hover:text-[#5e2a00] transition-colors cursor-pointer active:scale-95 inline-block">
           <ArrowLeft className="w-4 h-4" />
           Back to Home
         </Link>
@@ -257,14 +257,14 @@ export default function BookPage() {
 
         {/* ====== Book Info ====== */}
         <div className="flex flex-col justify-center lg:w-1/2 text-center lg:text-left">
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-[#1f3b2c]">
+          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-[#dc602e]">
             Hapttitude Wave 3
           </h1>
-          <p className="text-lg text-[#3a5a45] mt-2 font-medium pb-2 ">by Pretty Bhalla</p>
+          <p className="text-lg text-[#ff8811] mt-2 font-medium pb-2 ">by Pretty Bhalla</p>
          
            <div>
-          <p className="text-sm font-semibold text-[#244d38] mb-3">For Classes: 7th to 10th | Ages: 13–16</p>
-          <p className="text-[#1f3b2c] font-semibold mb-2">Focus:</p>
+          <p className="text-sm font-semibold text-[#5e2a00] mb-3">For Classes: 7th to 10th | Ages: 13–16</p>
+          <p className="text-[#dc602e] font-semibold mb-2">Focus:</p>
           <p className="text-[#3b4a3f] leading-relaxed">Teen mental strength, identity formation, stress & resilience.</p>
         </div>
         
@@ -273,7 +273,9 @@ export default function BookPage() {
           <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
             <button
               onClick={handleBuyNow}
-              className="px-7 py-2.5 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-200 flex items-center gap-2 active:scale-95 transform"
+              className="px-7 py-2.5 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-200 flex items-center gap-2 active:scale-95 transform"
             >
               <span>Buy now</span>
               <ExternalLink className="w-4 h-4" />
@@ -291,11 +293,11 @@ export default function BookPage() {
     
     {/* ===== Left Column ===== */}
     <div>
-      <h2 className="text-xl font-semibold mb-4 text-[#1f3b2c]">Description</h2>
+      <h2 className="text-xl font-semibold mb-4 text-[#dc602e]">Description</h2>
       <div className="space-y-4">
        
         <div className="pt-2">
-          <p className="text-[#1f3b2c] font-semibold mb-2">Modern-day challenges addressed:</p>
+          <p className="text-[#dc602e] font-semibold mb-2">Modern-day challenges addressed:</p>
           <ul className="list-disc list-inside text-[#3b4a3f] space-y-1 ml-2">
             <li>Academic pressure & anxiety</li>
             <li>Self-image issues</li>
@@ -310,10 +312,10 @@ export default function BookPage() {
 
     {/* ===== Right Column ===== */}
     <div>
-      <h2 className="text-xl font-semibold mb-4 text-[#1f3b2c] lg:opacity-0">Stories</h2>
+      <h2 className="text-xl font-semibold mb-4 text-[#dc602e] lg:opacity-0">Stories</h2>
       <div className="space-y-4">
         <div className="pt-2">
-          <p className="text-[#1f3b2c] font-semibold mb-2">Stories include themes like:</p>
+          <p className="text-[#dc602e] font-semibold mb-2">Stories include themes like:</p>
           <ul className="list-disc list-inside text-[#3b4a3f] space-y-1 ml-2">
             <li>Digital detox & emotional clarity</li>
             <li>Being "enough" in a filtered world</li>
@@ -334,12 +336,12 @@ export default function BookPage() {
           <div className="bg-[#f8fdf9] border border-[#d5e9dc] rounded-3xl shadow-2xl p-8 w-[90%] sm:w-[400px] text-center relative animate-fadeIn">
             <button
               onClick={() => setShowOtpModal(false)}
-              className="absolute top-4 right-4 text-[#355944] hover:text-[#1f3b2c]"
+              className="absolute top-4 right-4 text-[#355944] hover:text-[#dc602e]"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-2xl font-semibold text-[#1f3b2c] mb-6">Verify Your Email</h2>
+            <h2 className="text-2xl font-semibold text-[#dc602e] mb-6">Verify Your Email</h2>
 
             {!otpSent ? (
               <>
@@ -348,11 +350,13 @@ export default function BookPage() {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border border-[#cfe5d8] rounded-full px-5 py-3 text-[#1f3b2c] focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]/60"
+                  className="w-full border border-[#cfe5d8] rounded-full px-5 py-3 text-[#dc602e] focus:outline-none focus:ring-2 focus:ring-[#ff7b00]/60"
                 />
                 <button
                   onClick={sendOtp}
-                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-200 active:scale-95 transform"
+                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-200 active:scale-95 transform"
                 >
                   Send OTP
                 </button>
@@ -415,7 +419,9 @@ export default function BookPage() {
                       toast.error(err.message);
                     }
                   }}
-                  className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-200 active:scale-95 transform"
+                  className="w-full py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-200 active:scale-95 transform"
                 >
                   Verify & Continue
                 </button>

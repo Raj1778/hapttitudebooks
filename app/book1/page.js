@@ -234,7 +234,7 @@ export default function BookPage() {
           __html: JSON.stringify(bookStructuredData),
         }}
       />
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex flex-col items-center justify-start md:justify-center px-4 sm:px-6 lg:px-20 pt-8 md:py-2">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex flex-col items-center justify-start md:justify-center px-4 sm:px-6 lg:px-20 pt-8 md:py-2">
 
       {/* ===== Back Button ===== */}
       <div className="w-full max-w-6xl mb-4 mt-4">
@@ -270,10 +270,10 @@ export default function BookPage() {
 
         {/* ====== Book Info ====== */}
         <div className="flex flex-col justify-center lg:w-1/2 text-center lg:text-left">
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-[#1f3b2c]">
+          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-[#dc602e]">
             Hapttitude Waves
           </h1>
-          <p className="text-lg text-[#3a5a45] mt-2 font-medium">by Pretty Bhalla</p>
+          <p className="text-lg text-[#ff8811] mt-2 font-medium">by Pretty Bhalla</p>
           <p className="text-[#3c4a3f] mt-4 leading-relaxed max-w-lg mx-auto lg:mx-0">
             Step into a world where emotions shape reality. "Hapttitude Waves" is a tale of discovery, resilience, and the mysterious bond between thought and energy. Experience an uplifting story that explores the science of feeling.
           </p>
@@ -283,7 +283,9 @@ export default function BookPage() {
             <button
               onClick={handleBuyNow}
               disabled={isProcessingPurchase}
-              className="px-7 py-2.5 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="px-7 py-2.5 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-300 flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <span>{isProcessingPurchase ? "Please wait..." : "Buy now"}</span>
               <ExternalLink className="w-4 h-4" />
@@ -296,7 +298,7 @@ export default function BookPage() {
       <div className="bg-gradient-to-br from-[#f8fdf9] to-[#edf6f0] mt-10 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 max-w-6xl w-full flex flex-col lg:flex-row gap-8 lg:gap-12 relative border border-[#d5e9dc]/60">
         {/* ===== Left Description ===== */}
         <div className="lg:w-2/3 mt-12 mx-6">
-          <h2 className="text-xl font-semibold mb-2 text-[#1f3b2c]">Description</h2>
+          <h2 className="text-xl font-semibold mb-2 text-[#dc602e]">Description</h2>
           <p className="text-[#3b4a3f] leading-relaxed">
             When waves of thought become waves of light, the world transforms. Follow Aryan as he uncovers the hidden science behind human emotions, and how they ripple through the universe.
           </p>
@@ -308,19 +310,19 @@ export default function BookPage() {
         {/* ===== Right Meta Info ===== */}
         <div className="lg:w-1/3 flex flex-col gap-4">
           <div>
-            <h3 className="font-semibold text-[#1f3b2c]">Language</h3>
+            <h3 className="font-semibold text-[#dc602e]">Language</h3>
             <p className="text-[#3b4a3f]">English (India & Global)</p>
           </div>
           <div>
-            <h3 className="font-semibold text-[#1f3b2c]">Pages</h3>
+            <h3 className="font-semibold text-[#dc602e]">Pages</h3>
             <p className="text-[#3b4a3f]">368 pages, Paperback edition</p>
           </div>
           <div>
-            <h3 className="font-semibold text-[#1f3b2c]">Publisher</h3>
+            <h3 className="font-semibold text-[#dc602e]">Publisher</h3>
             <p className="text-[#3b4a3f]">WavePrint Publications</p>
           </div>
           <div>
-            <h3 className="font-semibold text-[#1f3b2c]">ISBN</h3>
+            <h3 className="font-semibold text-[#dc602e]">ISBN</h3>
             <p className="text-[#3b4a3f]">978-1-23456-789-0</p>
           </div>
         </div>
@@ -332,12 +334,12 @@ export default function BookPage() {
           <div className="bg-[#f8fdf9] border border-[#d5e9dc] rounded-3xl shadow-2xl p-8 w-[90%] sm:w-[400px] text-center relative animate-fadeIn">
             <button
               onClick={() => setShowOtpModal(false)}
-              className="absolute top-4 right-4 text-[#355944] hover:text-[#1f3b2c]"
+              className="absolute top-4 right-4 text-[#355944] hover:text-[#dc602e]"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-2xl font-semibold text-[#1f3b2c] mb-6">Verify Your Email</h2>
+            <h2 className="text-2xl font-semibold text-[#dc602e] mb-6">Verify Your Email</h2>
 
             {!otpSent ? (
               <>
@@ -346,12 +348,14 @@ export default function BookPage() {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border border-[#cfe5d8] rounded-full px-5 py-3 text-[#1f3b2c] focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]/60"
+                  className="w-full border border-[#cfe5d8] rounded-full px-5 py-3 text-[#dc602e] focus:outline-none focus:ring-2 focus:ring-[#ff7b00]/60"
                 />
                 <button
                   onClick={sendOtp}
                   disabled={isSendingOtp}
-                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full mt-5 py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isSendingOtp ? "Sending OTP..." : "Send OTP"}
                 </button>
@@ -376,7 +380,9 @@ export default function BookPage() {
                 <button
                   onClick={handleVerifyOtp}
                   disabled={isVerifyingOtp}
-                  className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-[#f5fff8] rounded-full text-sm font-semibold shadow-md hover:shadow-lg hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isVerifyingOtp ? "Verifying..." : "Verify & Continue"}
                 </button>

@@ -333,12 +333,12 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] px-4 sm:px-6 lg:px-20 py-4 sm:py-6 overflow-y-auto">
+    <div className="h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] px-4 sm:px-6 lg:px-20 py-4 sm:py-6 overflow-y-auto">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#1f3b2c]">
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#dc602e]">
               Admin Dashboard
             </h1>
             <p className="text-[#3b4a3f] mt-2">
@@ -356,7 +356,7 @@ export default function AdminDashboard() {
                   fetchMarketingStats();
                 }
               }}
-              className="px-4 py-2 border border-[#d5e9dc] rounded-lg bg-white text-[#1f3b2c] focus:outline-none focus:ring-2 focus:ring-[#2f6d4c] cursor-pointer"
+              className="px-4 py-2 border border-[#d5e9dc] rounded-lg bg-white text-[#dc602e] focus:outline-none focus:ring-2 focus:ring-[#ff7b00] cursor-pointer"
             >
               <option value="orders">Orders</option>
               <option value="marketing">Marketing</option>
@@ -374,7 +374,7 @@ export default function AdminDashboard() {
             <button
               onClick={fetchStats}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-[#2f6d4c] text-white rounded-full hover:bg-[#244d38] transition-colors disabled:opacity-50 cursor-pointer active:scale-95"
+              className="flex items-center gap-2 px-4 py-2 bg-[#ff7b00] text-white rounded-full hover:bg-[#5e2a00] transition-colors disabled:opacity-50 cursor-pointer active:scale-95"
               title="Refresh"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -401,9 +401,9 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[#3b4a3f] text-sm">Total Orders</p>
-                    <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{stats.totalOrders}</p>
+                    <p className="text-2xl font-bold text-[#dc602e] mt-2">{stats.totalOrders}</p>
                   </div>
-                  <Package className="w-10 h-10 text-[#2f6d4c]" />
+                  <Package className="w-10 h-10 text-[#ff7b00]" />
                 </div>
               </div>
 
@@ -411,9 +411,9 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[#3b4a3f] text-sm">Total Revenue</p>
-                    <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{formatCurrency(stats.totalRevenue)}</p>
+                    <p className="text-2xl font-bold text-[#dc602e] mt-2">{formatCurrency(stats.totalRevenue)}</p>
                   </div>
-                  <DollarSign className="w-10 h-10 text-[#2f6d4c]" />
+                  <DollarSign className="w-10 h-10 text-[#ff7b00]" />
                 </div>
               </div>
 
@@ -421,9 +421,9 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[#3b4a3f] text-sm">Customers</p>
-                    <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{stats.totalCustomers}</p>
+                    <p className="text-2xl font-bold text-[#dc602e] mt-2">{stats.totalCustomers}</p>
                   </div>
-                  <Users className="w-10 h-10 text-[#2f6d4c]" />
+                  <Users className="w-10 h-10 text-[#ff7b00]" />
                 </div>
               </div>
 
@@ -431,11 +431,11 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[#3b4a3f] text-sm">Pending Orders</p>
-                    <p className="text-2xl font-bold text-[#1f3b2c] mt-2">
+                    <p className="text-2xl font-bold text-[#dc602e] mt-2">
                       {stats.ordersByStatus.find(s => s._id === "Pending")?.count || 0}
                     </p>
                   </div>
-                  <TrendingUp className="w-10 h-10 text-[#2f6d4c]" />
+                  <TrendingUp className="w-10 h-10 text-[#ff7b00]" />
                 </div>
               </div>
             </div>
@@ -447,7 +447,7 @@ export default function AdminDashboard() {
         {viewMode === "orders" ? (
         <div className="bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h2 className="text-xl font-semibold text-[#1f3b2c]">Recent Orders</h2>
+            <h2 className="text-xl font-semibold text-[#dc602e]">Recent Orders</h2>
             
             {/* Sort and Filter Controls */}
             <div className="flex flex-wrap items-center gap-4">
@@ -457,7 +457,7 @@ export default function AdminDashboard() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2 border border-[#d5e9dc] rounded-lg bg-white text-[#1f3b2c] focus:outline-none focus:ring-2 focus:ring-[#2f6d4c] cursor-pointer"
+                  className="px-3 py-2 border border-[#d5e9dc] rounded-lg bg-white text-[#dc602e] focus:outline-none focus:ring-2 focus:ring-[#ff7b00] cursor-pointer"
                 >
                   <option value="date-high-to-low">Date: Newest First</option>
                   <option value="date-low-to-high">Date: Oldest First</option>
@@ -469,7 +469,7 @@ export default function AdminDashboard() {
               {/* Filter Dropdown */}
               <div className="relative">
                 <button
-                  className="flex items-center gap-2 px-3 py-2 border border-[#d5e9dc] rounded-lg bg-white text-[#1f3b2c] hover:bg-[#f0f7f3] transition-colors cursor-pointer active:scale-95"
+                  className="flex items-center gap-2 px-3 py-2 border border-[#d5e9dc] rounded-lg bg-white text-[#dc602e] hover:bg-[#f0f7f3] transition-colors cursor-pointer active:scale-95"
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowFilterPanel(!showFilterPanel);
@@ -478,7 +478,7 @@ export default function AdminDashboard() {
                   <Filter className="w-4 h-4" />
                   Filter
                   {Object.values(statusFilters).some(f => f) && (
-                    <span className="ml-1 px-1.5 py-0.5 bg-[#2f6d4c] text-white text-xs rounded-full">
+                    <span className="ml-1 px-1.5 py-0.5 bg-[#ff7b00] text-white text-xs rounded-full">
                       {Object.values(statusFilters).filter(f => f).length}
                     </span>
                   )}
@@ -495,7 +495,7 @@ export default function AdminDashboard() {
                       className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg border border-[#d5e9dc] p-4 z-20 min-w-[200px]"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <div className="text-sm font-semibold text-[#1f3b2c] mb-3">Filter by Status</div>
+                      <div className="text-sm font-semibold text-[#dc602e] mb-3">Filter by Status</div>
                       <div className="space-y-2">
                         {["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"].map((status) => (
                           <label
@@ -506,7 +506,7 @@ export default function AdminDashboard() {
                               type="checkbox"
                               checked={statusFilters[status] || false}
                               onChange={() => handleStatusFilterChange(status)}
-                              className="w-4 h-4 text-[#2f6d4c] border-[#d5e9dc] rounded focus:ring-[#2f6d4c] cursor-pointer"
+                              className="w-4 h-4 text-[#ff7b00] border-[#d5e9dc] rounded focus:ring-[#ff7b00] cursor-pointer"
                             />
                             <span className="text-sm text-[#3b4a3f]">{status}</span>
                           </label>
@@ -551,8 +551,8 @@ export default function AdminDashboard() {
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <Package className="w-4 h-4 text-[#2f6d4c]" />
-                        <h3 className="font-semibold text-[#1f3b2c]">{order.orderId}</h3>
+                        <Package className="w-4 h-4 text-[#ff7b00]" />
+                        <h3 className="font-semibold text-[#dc602e]">{order.orderId}</h3>
                       </div>
                       <div className="flex flex-wrap items-center gap-4 text-sm text-[#3b4a3f]">
                         <div className="flex items-center gap-1">
@@ -565,11 +565,11 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <p className="text-lg font-semibold text-[#1f3b2c]">{formatCurrency(order.total)}</p>
+                        <p className="text-lg font-semibold text-[#dc602e]">{formatCurrency(order.total)}</p>
                         <span
                           className={`text-xs px-2 py-1 rounded-full ${
                             order.status === "Delivered"
-                              ? "bg-green-100 text-green-700"
+                              ? "bg-orange-100 text-orange-700"
                               : order.status === "Shipped"
                               ? "bg-blue-100 text-blue-700"
                               : order.status === "Confirmed"
@@ -592,29 +592,29 @@ export default function AdminDashboard() {
           <div className="bg-[#f8fdf9] rounded-3xl shadow-md p-6 border border-[#d5e9dc]/60">
             {/* Marketing View */}
             <div className="flex items-center gap-2 mb-6">
-              <BarChart3 className="w-5 h-5 text-[#2f6d4c]" />
-              <h2 className="text-xl font-semibold text-[#1f3b2c]">Affiliate Marketing Stats</h2>
+              <BarChart3 className="w-5 h-5 text-[#ff7b00]" />
+              <h2 className="text-xl font-semibold text-[#dc602e]">Affiliate Marketing Stats</h2>
             </div>
 
             {/* Marketing Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white rounded-xl p-4 border border-[#d5e9dc]">
                 <p className="text-[#3b4a3f] text-sm">Total Clicks</p>
-                <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{marketingStats.totalClicks}</p>
+                <p className="text-2xl font-bold text-[#dc602e] mt-2">{marketingStats.totalClicks}</p>
               </div>
               <div className="bg-white rounded-xl p-4 border border-[#d5e9dc]">
                 <p className="text-[#3b4a3f] text-sm">Total Conversions</p>
-                <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{marketingStats.totalConversions}</p>
+                <p className="text-2xl font-bold text-[#dc602e] mt-2">{marketingStats.totalConversions}</p>
               </div>
               <div className="bg-white rounded-xl p-4 border border-[#d5e9dc]">
                 <p className="text-[#3b4a3f] text-sm">Total Commissions</p>
-                <p className="text-2xl font-bold text-[#1f3b2c] mt-2">{formatCurrency(marketingStats.totalCommissions)}</p>
+                <p className="text-2xl font-bold text-[#dc602e] mt-2">{formatCurrency(marketingStats.totalCommissions)}</p>
               </div>
             </div>
 
             {/* Affiliates List */}
             <div>
-              <h3 className="text-lg font-semibold text-[#1f3b2c] mb-4">Affiliate Marketers</h3>
+              <h3 className="text-lg font-semibold text-[#dc602e] mb-4">Affiliate Marketers</h3>
               {marketingStats.affiliates.length === 0 ? (
                 <div className="text-center py-12">
                   <Users className="w-16 h-16 text-[#3b4a3f] mx-auto mb-4 opacity-50" />
@@ -630,26 +630,26 @@ export default function AdminDashboard() {
                       <div key={affiliate._id} className="bg-white rounded-xl p-4 border border-[#d5e9dc]">
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                           <div className="flex-1">
-                            <h4 className="font-semibold text-[#1f3b2c]">{affiliate.name}</h4>
+                            <h4 className="font-semibold text-[#dc602e]">{affiliate.name}</h4>
                             <p className="text-sm text-[#3b4a3f]">{affiliate.email}</p>
                             <p className="text-xs text-[#3b4a3f] mt-1">Code: <span className="font-mono font-semibold">{affiliate.affiliateCode}</span></p>
                           </div>
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
                             <div>
                               <p className="text-[#3b4a3f] text-xs">Clicks</p>
-                              <p className="font-semibold text-[#1f3b2c]">{affiliate.totalClicks}</p>
+                              <p className="font-semibold text-[#dc602e]">{affiliate.totalClicks}</p>
                             </div>
                             <div>
                               <p className="text-[#3b4a3f] text-xs">Conversions</p>
-                              <p className="font-semibold text-[#1f3b2c]">{affiliate.totalConversions}</p>
+                              <p className="font-semibold text-[#dc602e]">{affiliate.totalConversions}</p>
                             </div>
                             <div>
                               <p className="text-[#3b4a3f] text-xs">Rate</p>
-                              <p className="font-semibold text-[#1f3b2c]">{conversionRate}%</p>
+                              <p className="font-semibold text-[#dc602e]">{conversionRate}%</p>
                             </div>
                             <div>
                               <p className="text-[#3b4a3f] text-xs">Commission</p>
-                              <p className="font-semibold text-[#1f3b2c]">{formatCurrency(affiliate.totalCommission)}</p>
+                              <p className="font-semibold text-[#dc602e]">{formatCurrency(affiliate.totalCommission)}</p>
                             </div>
                           </div>
                         </div>
@@ -676,7 +676,7 @@ export default function AdminDashboard() {
               className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="sticky top-0 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-white p-6 rounded-t-3xl flex justify-between items-center">
+              <div className="sticky top-0 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-white p-6 rounded-t-3xl flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Order Details</h2>
                 <button
                   onClick={() => setSelectedOrder(null)}
@@ -690,7 +690,7 @@ export default function AdminDashboard() {
                 {/* Order Info */}
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-lg font-semibold text-[#1f3b2c] mb-3">Order Information</h3>
+                    <h3 className="text-lg font-semibold text-[#dc602e] mb-3">Order Information</h3>
                     <div className="space-y-2 text-sm text-[#3b4a3f]">
                       <p><strong>Order ID:</strong> {selectedOrder.orderId}</p>
                       <p><strong>Date:</strong> {formatDate(selectedOrder.createdAt)}</p>
@@ -703,7 +703,7 @@ export default function AdminDashboard() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-[#1f3b2c] mb-3">Customer Information</h3>
+                    <h3 className="text-lg font-semibold text-[#dc602e] mb-3">Customer Information</h3>
                     <div className="space-y-2 text-sm text-[#3b4a3f]">
                       <p><strong>Email:</strong> {selectedOrder.email}</p>
                       <div className="flex items-center gap-2">
@@ -727,16 +727,16 @@ export default function AdminDashboard() {
 
                 {/* Order Items */}
                 <div>
-                  <h3 className="text-lg font-semibold text-[#1f3b2c] mb-3">Order Items</h3>
+                  <h3 className="text-lg font-semibold text-[#dc602e] mb-3">Order Items</h3>
                   <div className="space-y-3">
                     {selectedOrder.items && selectedOrder.items.length > 0 ? (
                       selectedOrder.items.map((item, index) => (
                         <div key={index} className="flex items-center gap-4 p-3 bg-[#f8fdf9] rounded-lg">
                           <div className="flex-1">
-                            <h4 className="font-medium text-[#1f3b2c]">{item.name}</h4>
+                            <h4 className="font-medium text-[#dc602e]">{item.name}</h4>
                             <p className="text-sm text-[#3b4a3f]">Quantity: {item.quantity} × ₹{item.price}</p>
                           </div>
-                          <p className="font-semibold text-[#1f3b2c]">₹{item.price * item.quantity}</p>
+                          <p className="font-semibold text-[#dc602e]">₹{item.price * item.quantity}</p>
                         </div>
                       ))
                     ) : (
@@ -756,7 +756,7 @@ export default function AdminDashboard() {
                       <span>Shipping</span>
                       <span>{formatCurrency(selectedOrder.total - (selectedOrder.items?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || selectedOrder.total - 40))}</span>
                     </div>
-                    <div className="flex justify-between text-[#1f3b2c] font-bold text-lg border-t border-[#d5e9dc] pt-2">
+                    <div className="flex justify-between text-[#dc602e] font-bold text-lg border-t border-[#d5e9dc] pt-2">
                       <span>Total</span>
                       <span>{formatCurrency(selectedOrder.total)}</span>
                     </div>
@@ -777,7 +777,7 @@ export default function AdminDashboard() {
                     <button
                       onClick={() => handleMarkAsDelivered(selectedOrder.orderId)}
                       disabled={updatingStatus}
-                      className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-95"
+                      className="flex items-center gap-2 px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-95"
                     >
                       <CheckCircle className="w-4 h-4" />
                       {updatingStatus ? "Updating..." : "Mark as Delivered"}
@@ -789,7 +789,7 @@ export default function AdminDashboard() {
                     <button
                       onClick={() => handleMarkAsDelivered(selectedOrder.orderId)}
                       disabled={updatingStatus}
-                      className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-95"
+                      className="flex items-center gap-2 px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-95"
                     >
                       <CheckCircle className="w-4 h-4" />
                       {updatingStatus ? "Updating..." : "Mark as Delivered"}

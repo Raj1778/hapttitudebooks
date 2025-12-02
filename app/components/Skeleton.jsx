@@ -1,6 +1,6 @@
 export function DashboardSkeleton() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] px-4 sm:px-6 lg:px-20 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] px-4 sm:px-6 lg:px-20 py-10">
       <div className="max-w-7xl mx-auto">
         {/* Header Skeleton */}
         <div className="flex justify-between items-center mb-8">
@@ -50,7 +50,7 @@ export function DashboardSkeleton() {
 
 export function AffiliateDashboardSkeleton() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] px-4 sm:px-6 lg:px-20 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] px-4 sm:px-6 lg:px-20 py-10">
       <div className="max-w-6xl mx-auto">
         {/* Header Skeleton */}
         <div className="flex justify-between items-center mb-8">
@@ -101,7 +101,7 @@ export function AffiliateDashboardSkeleton() {
 
 export function SelectAddressSkeleton() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] px-4 sm:px-6 lg:px-20 py-8 sm:py-12">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] px-4 sm:px-6 lg:px-20 py-8 sm:py-12">
       <div className="max-w-5xl mx-auto">
         {/* Back Button Skeleton */}
         <div className="mb-4">
@@ -146,7 +146,7 @@ export function SelectAddressSkeleton() {
 
 export function CartSkeleton() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] px-4 sm:px-6 lg:px-20 py-8 sm:py-12">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] px-4 sm:px-6 lg:px-20 py-8 sm:py-12">
       <div className="max-w-6xl mx-auto">
         {/* Back Button Skeleton */}
         <div className="mb-4">

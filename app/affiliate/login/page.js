@@ -82,10 +82,10 @@ export default function AffiliateLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f3ec] via-[#f4f9f6] to-[#fcfdfc] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#fff3e8] via-[#fff9f4] to-[#fffdfc] flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-[#f8fdf9] rounded-3xl shadow-lg p-8 border border-[#d5e9dc]/60">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-serif font-bold text-[#1f3b2c] mb-2">
+          <h1 className="text-3xl font-serif font-bold text-[#dc602e] mb-2">
             Affiliate Login
           </h1>
           <p className="text-[#3b4a3f]">
@@ -96,33 +96,35 @@ export default function AffiliateLoginPage() {
         {!isCreating ? (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+              <label className="block text-sm font-medium text-[#dc602e] mb-1">
                 Email
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+              <label className="block text-sm font-medium text-[#dc602e] mb-1">
                 Password
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
                 required
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-white rounded-full font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-white rounded-full font-semibold hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
             >
               <LogIn className="w-4 h-4" />
               {loading ? "Logging in..." : "Login"}
@@ -131,45 +133,47 @@ export default function AffiliateLoginPage() {
         ) : (
           <form onSubmit={handleCreateAccount} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+              <label className="block text-sm font-medium text-[#dc602e] mb-1">
                 Name
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+              <label className="block text-sm font-medium text-[#dc602e] mb-1">
                 Email
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1f3b2c] mb-1">
+              <label className="block text-sm font-medium text-[#dc602e] mb-1">
                 Password
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f6d4c]"
+                className="w-full p-3 border border-[#d5e9dc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff7b00]"
                 required
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-[#244d38] to-[#2f6d4c] text-white rounded-full font-semibold hover:from-[#1d3f2f] hover:to-[#2b5d44] transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3 bg-gradient-to-r from-[#fe8c00] to-[#f83600] text-white rounded-full font-semibold hover:from-[#ff5f1f] hover:to-[#ffcc33]
+
+ transition-all disabled:opacity-50 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
             >
               <UserPlus className="w-4 h-4" />
               {loading ? "Creating..." : "Create Account"}
@@ -185,7 +189,7 @@ export default function AffiliateLoginPage() {
               setPassword("");
               setName("");
             }}
-            className="text-sm text-[#2f5d44] hover:text-[#244d38] cursor-pointer active:scale-95 transition-transform"
+            className="text-sm text-[#2f5d44] hover:text-[#5e2a00] cursor-pointer active:scale-95 transition-transform"
           >
             {isCreating ? "Already have an account? Login" : "Don't have an account? Create one"}
           </button>
