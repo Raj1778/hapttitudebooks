@@ -7,6 +7,7 @@ import Author from "./components/Author";
 import BookSection from "./components/BookSection";
 import Footer from "./components/Footer";
 import { setCookie, getCookie } from "./utils/cookies";
+import CurvedRoadmap from "./components/Roadmap";
 
 export default function Home() {
   useEffect(() => {
@@ -66,6 +67,7 @@ export default function Home() {
         <Header />
       </div>
     </div>
+    <CurvedRoadmap/>
       <BookSection/>
       <Author/>
       <Footer></Footer>
