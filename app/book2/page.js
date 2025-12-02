@@ -21,7 +21,7 @@ export default function BookPage() {
         <div className="relative flex justify-center md:justify-start md:w-1/2">
           <div className="absolute md:bottom-[-80px] bottom-[-80px] left-1/2 md:left-56 -translate-x-1/2 md:translate-x-0 drop-shadow-2xl z-10">
             <Image
-              src="/book1.jpg"
+              src="/wave-1.png"
               alt="Hapttitude Waves"
               width={240}
               height={340}

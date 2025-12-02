@@ -26,7 +26,7 @@ export const baseMetadata = {
     description: 'Discover transformative books that empower your mind, embrace your emotions, and build inner peace.',
     images: [
       {
-        url: '/book1.jpg',
+        url: '/wave-1.png',
         width: 1200,
         height: 630,
         alt: 'Hapttitude Books',
@@ -37,7 +37,7 @@ export const baseMetadata = {
     card: 'summary_large_image',
     title: 'Hapttitude Books - Empower Your Mind, Embrace Your Emotions',
     description: 'Discover transformative books that empower your mind, embrace your emotions, and build inner peace.',
-    images: ['/book1.jpg'],
+    images: ['/wave-1.png'],
   },
   robots: {
     index: true,

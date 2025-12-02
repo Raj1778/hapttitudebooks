@@ -3,17 +3,11 @@ import Image from 'next/image';
 
 const HeaderBackground = () => {
   return (
-    <div className="fixed inset-0 -z-10 w-full h-screen bg-[#f4f9f6]">
-      <Image
+     <div className="fixed inset-0 -z-10 w-full h-screen bg-[#f4f9f6]">
+      <img
         src="/sunset.jpg"
         alt="Background"
-        fill
-        priority
-        quality={85}
-        sizes="100vw"
-        className="object-cover"
-        placeholder="blur"
-        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/..."
+        className="w-full h-full object-cover"
       />
     </div>
   );

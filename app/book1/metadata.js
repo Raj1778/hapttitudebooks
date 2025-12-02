@@ -12,7 +12,7 @@ export const metadata = {
     url: '/hapttitude-wave1',
     images: [
       {
-        url: '/book1.jpg',
+        url: '/wave-1.png',
         width: 1200,
         height: 630,
         alt: 'Hapttitude Wave 1 Book Cover',
@@ -23,7 +23,7 @@ export const metadata = {
     ...baseMetadata.twitter,
     title: 'Hapttitude Wave 1 - When Waves of Thought Become Waves of Light',
     description: 'Follow Aryan as he uncovers the hidden science behind human emotions, and how they ripple through the universe.',
-    images: ['/book1.jpg'],
+    images: ['/wave-1.png'],
   },
   alternates: {
     canonical: '/hapttitude-wave1',
